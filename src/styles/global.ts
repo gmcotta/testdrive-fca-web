@@ -7,6 +7,10 @@ export default createGlobalStyle`
     box-sizing: 'border-box';
   }
 
+  html {
+    font-size: 62.5%;
+  }
+
   html, body, #root {
     max-height: 100vh;
     max-width: 100vw;
@@ -30,5 +34,13 @@ export default createGlobalStyle`
     --color-gray-dark: #8a8d8b;
     --color-green: #a3c299;
     --color-red: #bf3b26;
+  }
+
+  .light {
+    color: var(--color-light);
+  }
+
+  .text--center {
+    text-align: center;
   }
 `;
