@@ -39,6 +39,9 @@ export default createGlobalStyle`
   .light {
     color: var(--color-light);
   }
+  .dark {
+    color: var(--color-dark);
+  }
 
   .text--center {
     text-align: center;

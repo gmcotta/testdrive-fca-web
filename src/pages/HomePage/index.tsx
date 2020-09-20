@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
+import Button from '../../components/Button';
 
 const HomePage: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const HomePage: React.FC = () => {
         questão de garantir aos nossos clientes uma demonstração dos automóveis
         antes da compra, através do agendamento de um Test Drive.
       </ParagraphPrimary>
+      <Button>Agende um test drive</Button>
     </div>
   );
 };
