@@ -13,13 +13,13 @@ export const LeftSection = styled.main`
   flex-direction: column;
   justify-content: space-between;
   height: 80vh;
-  width: 40vw;
+  max-width: min(40rem, 30%);
   padding-left: 3.2rem;
 `;
 
 export const RightSection = styled.aside`
   background-color: var(--color-primary);
-  width: 60vw;
+  width: 70%;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
   display: flex;
   position: relative;
@@ -27,6 +27,7 @@ export const RightSection = styled.aside`
 
 export const Shape = styled.div`
   float: left;
+  width: 2000px;
   shape-outside: polygon(0 0, 100% 100%, 0 100%);
 `;
 

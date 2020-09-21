@@ -25,33 +25,12 @@ const HomePage: React.FC = () => {
         <img src={logo} alt="FCA logo" />
         <Title>TEST DRIVE</Title>
         <ButtonWrapper>
-          <HomeButton>Agende um test drive</HomeButton>
-          <HomeButton>Avalie seu test drive</HomeButton>
+          <HomeButton to="/">Agende um test drive</HomeButton>
+          <HomeButton to="/review">Avalie seu test drive</HomeButton>
         </ButtonWrapper>
       </LeftSection>
       <RightSection>
-        <Shape />
-        <ParagraphPrimary>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-          assumenda minima quisquam officia aspernatur consequatur, maxime nemo
-          iusto dolore non perspiciatis suscipit fuga adipisci, ullam, qui
-          repellendus a alias nihil. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quia assumenda minima quisquam officia aspernatur
-          consequatur, maxime nemo iusto dolore non perspiciatis suscipit fuga
-          adipisci, ullam, qui repellendus a alias nihil. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quia assumenda minima quisquam
-          officia aspernatur consequatur, maxime nemo iusto dolore non
-          perspiciatis suscipit fuga adipisci, ullam, qui repellendus a alias
-          nihil. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-          assumenda minima quisquam officia aspernatur consequatur, maxime nemo
-          iusto dolore non perspiciatis suscipit fuga adipisci, ullam, qui
-          repellendus a alias nihil. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quia assumenda minima quisquam officia aspernatur
-          consequatur, maxime nemo iusto dolore non perspiciatis suscipit fuga
-          adipisci, ullam, qui repellendus a alias nihil.
-        </ParagraphPrimary>
-
-        {/* <Content>
+        <Content>
           <HeadingPrimary className="light">
             Faça um test drive conosco
           </HeadingPrimary>
@@ -66,7 +45,7 @@ const HomePage: React.FC = () => {
             demonstração dos automóveis antes da compra, através do agendamento
             de um Test Drive.
           </ParagraphPrimary>
-        </Content> */}
+        </Content>
       </RightSection>
     </Container>
   );
