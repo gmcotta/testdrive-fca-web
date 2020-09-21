@@ -2,6 +2,7 @@ import React from 'react';
 
 import Header from '../../components/Header';
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
+import Input from '../../components/Input';
 
 import { Content } from './styles';
 
@@ -17,6 +18,13 @@ const Review: React.FC = () => {
         <ParagraphPrimary>
           Caso queira, também pode fazer a avaliação de maneira anônima.
         </ParagraphPrimary>
+
+        <Input
+          id="identification"
+          name="identification"
+          label="Identificação"
+          error="Teste erro"
+        />
       </Content>
     </>
   );
