@@ -9,7 +9,10 @@ export const Container = styled.div`
 
     &:checked ~ label div {
       background-color: var(--color-primary);
-      color: var(--color-primary);
+
+      & span {
+        display: inline;
+      }
     }
   }
 
@@ -28,13 +31,21 @@ export const Container = styled.div`
 `;
 
 export const Box = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 1.6rem;
   height: 1.6rem;
   border: 1px solid var(--color-primary);
   border-radius: 4px;
+
+  & span {
+    display: none;
+    color: var(--color-light);
+  }
 `;
 
 export const Label = styled.span`
   margin-left: 0.8rem;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
 `;

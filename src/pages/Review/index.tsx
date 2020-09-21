@@ -27,7 +27,12 @@ const Review: React.FC = () => {
           error="Teste erro"
         />
 
-        <Checkbox />
+        <Checkbox
+          id="anonymous"
+          name="anonymous"
+          label="Quero avaliar anonimamente"
+          error="Teste erro checkbox"
+        />
       </Content>
     </>
   );

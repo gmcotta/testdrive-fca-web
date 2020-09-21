@@ -2,17 +2,26 @@ import React from 'react';
 
 import { Container, Box, Label } from './styles';
 
-const Checkbox: React.FC = () => {
+type CheckboxTypes = {
+  id: string;
+  name: string;
+  label: string;
+  error?: string;
+};
+
+const Checkbox: React.FC<CheckboxTypes> = ({ id, name, label, error }) => {
   return (
     <Container>
       <>
-        <input type="checkbox" name="" id="teste" />
-        <label htmlFor="teste">
-          <Box />
-          <Label>Teste</Label>
+        <input type="checkbox" name={name} id={id} />
+        <label htmlFor={id}>
+          <Box>
+            <span>&#10003;</span>
+          </Box>
+          <Label>{label}</Label>
         </label>
       </>
-      <span>Teste erro</span>
+      <span>{error}</span>
     </Container>
   );
 };
