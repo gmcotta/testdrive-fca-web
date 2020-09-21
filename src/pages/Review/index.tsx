@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '../../components/Header';
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
 import Input from '../../components/Input';
+import Checkbox from '../../components/Checkbox';
 
 import { Content } from './styles';
 
@@ -25,6 +26,8 @@ const Review: React.FC = () => {
           label="Identificação"
           error="Teste erro"
         />
+
+        <Checkbox />
       </Content>
     </>
   );
