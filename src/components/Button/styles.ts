@@ -12,7 +12,7 @@ export const Wrapper = styled(Link)`
   font-size: 2.4rem;
   text-transform: uppercase;
   text-decoration: none;
-  background: var(--color-primary);
+  background-color: var(--color-primary);
   color: var(--color-light);
 
   &:hover {

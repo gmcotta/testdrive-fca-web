@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
 import Review from './pages/Review';
+import Appointment from './pages/Appointment';
 
 import GlobalStyles from './styles/global';
 
@@ -14,6 +15,7 @@ ReactDOM.render(
       <Switch>
         <Route path="/" exact component={HomePage} />
         <Route path="/review" component={Review} />
+        <Route path="/appointment" component={Appointment} />
       </Switch>
     </BrowserRouter>
   </React.StrictMode>,
