@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.form``;
 
 export const StepperHeader = styled.header`
   display: flex;
@@ -53,6 +53,12 @@ export const ProgressLine = styled.div`
     &.passed {
       background-color: var(--color-primary);
     }
+  }
+`;
+
+export const StepperContent = styled.section`
+  > div.hide {
+    display: none;
   }
 `;
 

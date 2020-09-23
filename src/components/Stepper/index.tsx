@@ -7,15 +7,14 @@ import {
   StepperHeader,
   HeaderStep,
   ProgressLine,
+  StepperContent,
   StepperFooter,
 } from './styles';
-
-import './styles.css';
 
 type StepperProps = {
   steps: {
     title: string;
-    page: string;
+    page: JSX.Element;
   }[];
   header?: boolean;
   footer?: boolean;
@@ -40,43 +39,45 @@ const Stepper: React.FC<StepperProps> = ({ steps, header, footer }) => {
 
   return (
     <Container>
-      <StepperHeader>
+      {header && (
+        <StepperHeader>
+          {steps.map((step, index) => (
+            <>
+              <HeaderStep key={`step-${index + 1}`}>
+                <div className={headerStepClassName(index)}>
+                  {currentStep > index ? (
+                    <span className="checkmark">
+                      <MdCheck />
+                    </span>
+                  ) : (
+                    <span>{index + 1}</span>
+                  )}
+                </div>
+              </HeaderStep>
+              {!(index === steps.length - 1) && (
+                <ProgressLine>
+                  <span className={headerStepClassName(index)} />
+                </ProgressLine>
+              )}
+            </>
+          ))}
+        </StepperHeader>
+      )}
+      <StepperContent>
         {steps.map((step, index) => (
-          <>
-            <HeaderStep key={`step-${index + 1}`}>
-              <div className={headerStepClassName(index)}>
-                {currentStep > index ? (
-                  <span className="checkmark">
-                    <MdCheck />
-                  </span>
-                ) : (
-                  <span>{index + 1}</span>
-                )}
-              </div>
-            </HeaderStep>
-            {!(index === steps.length - 1) && (
-              <ProgressLine>
-                <span className={headerStepClassName(index)} />
-              </ProgressLine>
-            )}
-          </>
-        ))}
-      </StepperHeader>
-      <div>
-        {steps.map((step, index) => (
-          <span
-            key={`page-${step.page}`}
-            className={index === currentStep ? 'page--active' : 'page--hide'}
+          <div
+            key={`page-${step.title}`}
+            className={index === currentStep ? '' : 'hide'}
           >
             {step.page}
-          </span>
+          </div>
         ))}
-      </div>
+      </StepperContent>
       <StepperFooter>
         <button
           type="button"
           onClick={() => previousStep()}
-          disabled={currentStep === 0}
+          disabled={currentStep === 0 || currentStep === steps.length}
         >
           Voltar
         </button>

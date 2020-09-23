@@ -1,22 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Stepper from '../../components/Stepper';
+import Identification from '../Review/Steps/Identification';
+import Car from '../Review/Steps/Car';
+import Comment from '../Review/Steps/Comment';
 
 const Appointment: React.FC = () => {
+  const values = {
+    identification: '',
+    anonymous: false,
+    car: '',
+    text: '',
+  };
+
   const steps = [
     {
-      title: 'Teste 1',
-      page: 'Page1',
+      title: 'Identificação',
+      page: <Identification values={values} />,
     },
     {
-      title: 'Teste 2',
-      page: 'Page2',
+      title: 'Carro',
+      page: <Car />,
     },
     {
-      title: 'Teste 33333333333333333333',
-      page: 'Page3',
+      title: 'Comentário',
+      page: <Comment />,
     },
   ];
+
+  const [formValues, setFormValues] = useState(values);
+
   return (
     <div>
       <Stepper header steps={steps} footer />
