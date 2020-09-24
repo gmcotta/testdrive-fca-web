@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import api from '../../services/api';
+
 import './styles.css';
 
 type FormValues = {
@@ -6,6 +8,10 @@ type FormValues = {
   anonymous: boolean;
   car: string;
   text: string;
+};
+
+type RecommendationType = {
+  [key: string]: string;
 };
 
 const StepperForm = () => {
@@ -27,12 +33,29 @@ const StepperForm = () => {
     car: false,
     text: false,
   };
+  const initialResult = {
+    recommendation: '',
+    entities: [],
+  };
+
+  const recommendedCars: RecommendationType = {
+    TORO: 'Fiat Toro',
+    DUCATO: 'Fiat Ducato',
+    FIORINO: 'Fiat Fiorino',
+    CRONOS: 'Fiat Cronos',
+    'FIAT 500': 'Fiat 500',
+    MAREA: 'Fiat Marea',
+    LINEA: 'Fiat Linea',
+    ARGO: 'Fiat Argo',
+    RENEGADE: 'Jeep Renegade',
+  };
 
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
+  const [apiResults, setApiResults] = useState(initialResult);
 
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
   const commentMaxLength = 200;
 
   const defineErrorMessage = useCallback((key, message) => {
@@ -135,14 +158,20 @@ const StepperForm = () => {
               text: true,
             }));
           } else {
-            nextStep();
+            api
+              .post('/api/v1/recommend', { car: values.car, text: values.text })
+              .then(response => {
+                console.log(response.data);
+                setApiResults(response.data);
+                nextStep();
+              });
           }
           break;
         default:
           break;
       }
     },
-    [currentStep, nextStep, errors, setTouched],
+    [currentStep, nextStep, errors, setTouched, values, apiResults],
   );
 
   return (
@@ -183,15 +212,15 @@ const StepperForm = () => {
           onBlur={event => handleBlur(event)}
         >
           <option value="">Selecione um carro</option>
-          <option value="toro">Toro</option>
-          <option value="ducato">Ducato</option>
-          <option value="fiorino">Fiorino</option>
-          <option value="cronos">Cronos</option>
-          <option value="fiat 500">Fiat 500</option>
-          <option value="marea">Marea</option>
-          <option value="linea">Linea</option>
-          <option value="argo">Argo</option>
-          <option value="renegade">Renegade</option>
+          <option value="TORO">Toro</option>
+          <option value="DUCATO">Ducato</option>
+          <option value="FIORINO">Fiorino</option>
+          <option value="CRONOS">Cronos</option>
+          <option value="FIAT 500">Fiat 500</option>
+          <option value="MAREA">Marea</option>
+          <option value="LINEA">Linea</option>
+          <option value="ARGO">Argo</option>
+          <option value="RENEGADE">Renegade</option>
         </select>
         {touched.car && errors.car && <span>{errors.car}</span>}
       </section>
@@ -212,6 +241,28 @@ const StepperForm = () => {
       </section>
       <section className={`section--${currentStep === 3 ? 'active' : 'hide'}`}>
         <h1>Obrigado</h1>
+        {apiResults.recommendation && (
+          <>
+            <p>Que pena que você não gostou do carro &#58;&#40;</p>
+            <p>
+              {`Caso queira realizar um novo test drive conosco,
+            sugerimos o ${recommendedCars[apiResults.recommendation]}.`}
+            </p>
+          </>
+        )}
+        {!apiResults.recommendation && apiResults.entities.length && (
+          <>
+            <p>Maravilha! Ficamos felizes que tenha gostado!</p>
+            <p>Caso tenha se identificado, entraremos em contato.</p>
+          </>
+        )}
+        {!apiResults.recommendation && !apiResults.entities.length && (
+          <>
+            <p>Não conseguimos processar seu comentário...</p>
+            <p>Por favor, tente novamente mais tarde.</p>
+          </>
+        )}
+        <h1>{JSON.stringify(apiResults, null, 2)}</h1>
       </section>
       <footer>
         <button
@@ -237,24 +288,3 @@ const TesteStepper: React.FC = () => {
 };
 
 export default TesteStepper;
-
-// const schemaValidation = Yup.object().shape({
-//   identification: Yup.string().when('anonymous', {
-//     is: false,
-//     then: Yup.string().required('Necessário preencher algum campo.'),
-//   }),
-//   anonymous: Yup.boolean(),
-//   car: Yup.string().when(['identification', 'anonymous'], {
-//     is: (identification, anonymous) => anonymous || !!identification,
-//     then: Yup.string().required('Necessário selecionar um carro.'),
-//   }),
-// });
-
-// schemaValidation
-//   .validate({
-//     identification: values.identification,
-//     anonymous: values.anonymous,
-//     car: values.car,
-//   })
-//   .then(valuesValidated => console.log(valuesValidated))
-//   .catch(err => console.log(err.errors));
