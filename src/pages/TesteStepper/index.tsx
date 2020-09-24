@@ -1,5 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from 'react';
 import api from '../../services/api';
+
+import ARGO from '../../assets/carrossel_argo.png';
+import CRONOS from '../../assets/carrossel_cronos.png';
+import DUCATO from '../../assets/carrossel_ducato.png';
+import FIAT500 from '../../assets/carrossel_fiat500.png';
+import FIORINO from '../../assets/carrossel_fiorino.png';
+import LINEA from '../../assets/carrossel_linea.png';
+import MAREA from '../../assets/carrossel_marea.png';
+import RENEGADE from '../../assets/carrossel_renegade.png';
+import TORO from '../../assets/carrossel_toro.png';
 
 import './styles.css';
 
@@ -38,24 +54,59 @@ const StepperForm = () => {
     entities: [],
   };
 
-  const recommendedCars: RecommendationType = {
-    TORO: 'Fiat Toro',
-    DUCATO: 'Fiat Ducato',
-    FIORINO: 'Fiat Fiorino',
-    CRONOS: 'Fiat Cronos',
-    'FIAT 500': 'Fiat 500',
-    MAREA: 'Fiat Marea',
-    LINEA: 'Fiat Linea',
-    ARGO: 'Fiat Argo',
-    RENEGADE: 'Jeep Renegade',
-  };
+  const carPhotos = useMemo(
+    () => [
+      ARGO,
+      CRONOS,
+      DUCATO,
+      FIAT500,
+      FIORINO,
+      LINEA,
+      MAREA,
+      RENEGADE,
+      TORO,
+    ],
+    [],
+  );
+
+  const carouselCaptions = useMemo(
+    () => [
+      'Fiat Argo',
+      'Fiat Cronos',
+      'Fiat Ducato',
+      'Fiat 500',
+      'Fiat Fiorino',
+      'Fiat Linea',
+      'Fiat Marea',
+      'Jeep Renegade',
+      'Fiat Toro',
+    ],
+    [],
+  );
+
+  const recommendedCars: RecommendationType = useMemo(
+    () => ({
+      ARGO: 'Fiat Argo',
+      CRONOS: 'Fiat Cronos',
+      DUCATO: 'Fiat Ducato',
+      FIAT500: 'Fiat 500',
+      FIORINO: 'Fiat Fiorino',
+      LINEA: 'Fiat Linea',
+      MAREA: 'Fiat Marea',
+      RENEGADE: 'Jeep Renegade',
+      TORO: 'Fiat Toro',
+    }),
+    [],
+  );
 
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
 
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const trackRef = useRef<HTMLUListElement>(null);
   const commentMaxLength = 200;
 
   const defineErrorMessage = useCallback((key, message) => {
@@ -65,6 +116,7 @@ const StepperForm = () => {
     }));
   }, []);
 
+  // Set error messages
   useEffect(() => {
     if (!values.identification && !values.anonymous) {
       defineErrorMessage('identification', 'Necessário preencher uma opção.');
@@ -118,9 +170,60 @@ const StepperForm = () => {
   const prevStep = useCallback(() => {
     setCurrentStep(oldStep => oldStep - 1);
   }, []);
+
   const nextStep = useCallback(() => {
     setCurrentStep(oldStep => oldStep + 1);
   }, []);
+
+  const selectStep = useCallback((stepNumber) => {
+    setCurrentStep(stepNumber);
+  }, []);
+
+  const previousSlide = useCallback(() => {
+    setCurrentSlide(oldSlide => oldSlide - 1);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide(oldSlide => oldSlide + 1);
+  }, []);
+
+  const selectSlide = useCallback(slideNumber => {
+    setCurrentSlide(slideNumber);
+  }, []);
+
+  const selectSlideUsingTouch = useCallback(() => {
+    setTimeout(() => {
+      if (trackRef.current !== null) {
+        trackRef.current.click();
+        const slideNumber = Math.round(
+          trackRef.current.scrollLeft / trackRef.current.offsetWidth,
+        );
+        setCurrentSlide(slideNumber);
+      }
+    }, 300);
+  }, []);
+
+  // Carousel mechanics
+  useEffect(() => {
+    if (trackRef.current !== null) {
+      const slideWidth = trackRef.current.offsetWidth;
+      return trackRef.current.scrollTo(currentSlide * slideWidth, 0);
+    }
+    return undefined;
+  }, [currentSlide, trackRef]);
+
+  // Set current car on form
+  useEffect(() => {
+    const currentCarOnCarousel = carouselCaptions[currentSlide];
+    const carList = Object.keys(recommendedCars);
+    const car = carList.find(
+      key => recommendedCars[key] === currentCarOnCarousel,
+    );
+
+    if (car !== undefined) {
+      setValues(oldValues => ({ ...oldValues, car }));
+    }
+  }, [setValues, carouselCaptions, currentSlide, recommendedCars]);
 
   const handleSubmit = useCallback(
     event => {
@@ -134,11 +237,23 @@ const StepperForm = () => {
               anonymous: true,
             }));
           } else {
-            // regra para verificar a identificação no db
-            // se estiver certo, levar para a seção de comentário
-            // se estiver errado, mostrar mensagem de erro
-            // se for anônimo, levar para a seção de carro
-            nextStep();
+            // use case to check identification on db
+            const dbIdentification = 'teste';
+            const dbCar = 'FIORINO';
+
+            if (values.anonymous) {
+              nextStep();
+            }
+
+            if (values.identification === dbIdentification) {
+              setValues(oldValues => ({
+                ...oldValues,
+                car: dbCar,
+              }));
+              selectStep(2);
+            } else {
+              defineErrorMessage('identification', 'Usuário não encontrado...');
+            }
           }
           break;
         case 1:
@@ -171,7 +286,7 @@ const StepperForm = () => {
           break;
       }
     },
-    [currentStep, nextStep, errors, setTouched, values, apiResults],
+    [currentStep, nextStep, errors, setTouched, values, defineErrorMessage, selectStep],
   );
 
   return (
@@ -204,25 +319,138 @@ const StepperForm = () => {
         <label htmlFor="anonymous">Quero avaliar anonimamente</label>
       </section>
       <section className={`section--${currentStep === 1 ? 'active' : 'hide'}`}>
-        <select
-          name="car"
-          id="car"
-          value={values.car}
-          onChange={event => handleChange(event)}
-          onBlur={event => handleBlur(event)}
-        >
-          <option value="">Selecione um carro</option>
-          <option value="TORO">Toro</option>
-          <option value="DUCATO">Ducato</option>
-          <option value="FIORINO">Fiorino</option>
-          <option value="CRONOS">Cronos</option>
-          <option value="FIAT 500">Fiat 500</option>
-          <option value="MAREA">Marea</option>
-          <option value="LINEA">Linea</option>
-          <option value="ARGO">Argo</option>
-          <option value="RENEGADE">Renegade</option>
-        </select>
-        {touched.car && errors.car && <span>{errors.car}</span>}
+        <div className="carousel__container">
+          <div className="carousel__wrapper">
+            <button
+              className="carousel__slide-button left"
+              type="button"
+              onClick={() => previousSlide()}
+              disabled={currentSlide === 0}
+            >
+              &#10094;
+            </button>
+            <button
+              className="carousel__slide-button right"
+              type="button"
+              onClick={() => nextSlide()}
+              disabled={currentSlide === 8}
+            >
+              &#10095;
+            </button>
+            <ul
+              className="carousel__slider"
+              ref={trackRef}
+              onTouchEnd={() => selectSlideUsingTouch()}
+            >
+              <li className="carousel__item">
+                <img className="carousel__image" src={ARGO} alt="argo" />
+              </li>
+              <li className="carousel__item">
+                <img className="carousel__image" src={CRONOS} alt="cronos" />
+              </li>
+              <li className="carousel__item">
+                <img className="carousel__image" src={DUCATO} alt="ducato" />
+              </li>
+              <li className="carousel__item">
+                <img className="carousel__image" src={FIAT500} alt="fiat500" />
+              </li>
+              <li className="carousel__item">
+                <img className="carousel__image" src={FIORINO} alt="fiorino" />
+              </li>
+              <li className="carousel__item">
+                <img className="carousel__image" src={LINEA} alt="linea" />
+              </li>
+              <li className="carousel__item">
+                <img className="carousel__image" src={MAREA} alt="marea" />
+              </li>
+              <li className="carousel__item">
+                <img
+                  className="carousel__image"
+                  src={RENEGADE}
+                  alt="renegade"
+                />
+              </li>
+              <li className="carousel__item">
+                <img className="carousel__image" src={TORO} alt="toro" />
+              </li>
+            </ul>
+            <div className="carousel__nav">
+              <button
+                type="button"
+                aria-label="slide-0"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 0 && 'active'
+                }`}
+                onClick={() => selectSlide(0)}
+              />
+              <button
+                type="button"
+                aria-label="slide-1"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 1 && 'active'
+                }`}
+                onClick={() => selectSlide(1)}
+              />
+              <button
+                type="button"
+                aria-label="slide-2"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 2 && 'active'
+                }`}
+                onClick={() => selectSlide(2)}
+              />
+              <button
+                type="button"
+                aria-label="slide-3"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 3 && 'active'
+                }`}
+                onClick={() => selectSlide(3)}
+              />
+              <button
+                type="button"
+                aria-label="slide-4"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 4 && 'active'
+                }`}
+                onClick={() => selectSlide(4)}
+              />
+              <button
+                type="button"
+                aria-label="slide-5"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 5 && 'active'
+                }`}
+                onClick={() => selectSlide(5)}
+              />
+              <button
+                type="button"
+                aria-label="slide-6"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 6 && 'active'
+                }`}
+                onClick={() => selectSlide(6)}
+              />
+              <button
+                type="button"
+                aria-label="slide-7"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 7 && 'active'
+                }`}
+                onClick={() => selectSlide(7)}
+              />
+              <button
+                type="button"
+                aria-label="slide-8"
+                className={`carousel__nav-indicator ${
+                  currentSlide === 8 && 'active'
+                }`}
+                onClick={() => selectSlide(8)}
+              />
+            </div>
+          </div>
+          <p>{carouselCaptions[currentSlide]}</p>
+        </div>
       </section>
       <section className={`section--${currentStep === 2 ? 'active' : 'hide'}`}>
         <label htmlFor="text">Comentário</label>

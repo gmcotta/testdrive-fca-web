@@ -20,6 +20,7 @@ export default createGlobalStyle`
 
   *, button, input {
     font-family: 'Montserrat', sans-serif;
+    outline: 0;
   }
 
   :root {
