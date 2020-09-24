@@ -18,6 +18,7 @@ import RENEGADE from '../../assets/carrossel_renegade.png';
 import TORO from '../../assets/carrossel_toro.png';
 
 import './styles.css';
+import Button from '../../components/Button';
 
 type FormValues = {
   identification: string;
@@ -54,18 +55,18 @@ const StepperForm = () => {
     entities: [],
   };
 
-  const carPhotos = useMemo(
-    () => [
-      ARGO,
-      CRONOS,
-      DUCATO,
-      FIAT500,
-      FIORINO,
-      LINEA,
-      MAREA,
-      RENEGADE,
-      TORO,
-    ],
+  const carPhotos: RecommendationType = useMemo(
+    () => ({
+      ARGO: ARGO,
+      CRONOS: CRONOS,
+      DUCATO: DUCATO,
+      FIAT500: FIAT500,
+      FIORINO: FIORINO,
+      LINEA: LINEA,
+      MAREA: MAREA,
+      RENEGADE: RENEGADE,
+      TORO: TORO
+    }),
     [],
   );
 
@@ -103,6 +104,7 @@ const StepperForm = () => {
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
+  const [carPhoto, setCarPhoto] = useState('');
 
   const [currentStep, setCurrentStep] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -276,8 +278,13 @@ const StepperForm = () => {
             api
               .post('/api/v1/recommend', { car: values.car, text: values.text })
               .then(response => {
-                console.log(response.data);
-                setApiResults(response.data);
+                const recommendationWithoutSpace = response.data.recommendation.replace(' ', '');
+                console.log(recommendationWithoutSpace);
+                setApiResults({
+                  recommendation: recommendationWithoutSpace,
+                  entities: response.data.entities,
+                });
+
                 nextStep();
               });
           }
@@ -471,17 +478,26 @@ const StepperForm = () => {
         <h1>Obrigado</h1>
         {apiResults.recommendation && (
           <>
-            <p>Que pena que você não gostou do carro &#58;&#40;</p>
+            <p>{'Que pena que você não gostou do carro :('}</p>
             <p>
               {`Caso queira realizar um novo test drive conosco,
             sugerimos o ${recommendedCars[apiResults.recommendation]}.`}
             </p>
+            <img
+              src={carPhotos[apiResults.recommendation]}
+              alt={recommendedCars[apiResults.recommendation]}
+            />
+            <p>{recommendedCars[apiResults.recommendation]}</p>
+
+            <Button to="/review">Agendar test drive</Button>
           </>
         )}
         {!apiResults.recommendation && apiResults.entities.length && (
           <>
             <p>Maravilha! Ficamos felizes que tenha gostado!</p>
             <p>Caso tenha se identificado, entraremos em contato.</p>
+            <img src={carPhotos[values.car]} alt={recommendedCars[values.car]}/>
+            <p>{recommendedCars[values.car]}</p>
           </>
         )}
         {!apiResults.recommendation && !apiResults.entities.length && (
