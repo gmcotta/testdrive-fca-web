@@ -9,7 +9,7 @@ export const StepperForm = styled.form`
   max-width: 88rem;
   height: calc(100% - 5.6rem - 0.8rem);
   margin: 0.8rem auto 0;
-  padding-top: 0.8rem;
+  padding: 0.8rem;
   border-top: 2px solid var(--color-primary);
 `;
 
@@ -46,6 +46,7 @@ export const StepperFooter = styled.footer`
 
     &:not(:disabled):hover {
       font-weight: 700;
+      cursor: pointer;
     }
 
     &:disabled {

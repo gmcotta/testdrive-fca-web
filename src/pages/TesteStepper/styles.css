@@ -17,8 +17,8 @@
 
 .carousel__slider {
   display: flex;
-  width: 64rem;
-  height: 32rem;
+  /* width: 48rem;
+  height: 32rem; */
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
@@ -36,39 +36,40 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  height: calc(100% + 1px);
-  width: 30px;
+  height: 4rem;
+  width: 4rem;
   border: none;
+  border-radius: 50%;
   color: #fff;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--color-primary);
   cursor: pointer;
 }
 
 .carousel__slide-button:disabled {
-  display: none;
+  background-color: var(--color-gray);
+  color: var(--color-gray-dark);
+  cursor: not-allowed;
 }
 
 .left {
-  left: 0;
-  border-radius: 4px 0 0 4px;
+  left: -8rem;
 }
 
 .right {
-  right: 0;
-  border-radius: 0 4px 4px 0;
+  right: -8rem;
 }
 
 .carousel__item {
   flex-shrink: 0;
-  width: 100%;
-  height: 100%;
-  list-style: none;
-  scroll-snap-align: start;
+    width: 100%;
+    list-style: none;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
 }
 
 .carousel__image {
   width: 100%;
-  height: 100%;
 }
 
 .carousel__nav {

@@ -132,7 +132,7 @@ const Form = () => {
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const trackRef = useRef<HTMLUListElement>(null);
@@ -289,7 +289,10 @@ const Form = () => {
   // Set error messages
   useEffect(() => {
     if (!values.identification && !values.anonymous) {
-      defineErrorMessage('identification', 'Necessário preencher seu código.');
+      defineErrorMessage(
+        'identification',
+        'Necessário preencher seu código ou avaliar anonimamente.',
+      );
     }
     if (values.identification || values.anonymous) {
       defineErrorMessage('identification', '');
@@ -376,158 +379,177 @@ const Form = () => {
           </Step>
         )}
         {currentStep === 1 && (
-          <section
-            className={`section--${currentStep === 1 ? 'active' : 'hide'}`}
-          >
-            <div className="carousel__container">
-              <div className="carousel__wrapper">
-                <button
-                  className="carousel__slide-button left"
-                  type="button"
-                  onClick={() => previousSlide()}
-                  disabled={currentSlide === 0}
-                >
-                  &#10094;
-                </button>
-                <button
-                  className="carousel__slide-button right"
-                  type="button"
-                  onClick={() => nextSlide()}
-                  disabled={currentSlide === 8}
-                >
-                  &#10095;
-                </button>
-                <ul
-                  className="carousel__slider"
-                  ref={trackRef}
-                  onTouchEnd={() => selectSlideUsingTouch()}
-                >
-                  <li className="carousel__item">
-                    <img className="carousel__image" src={ARGO} alt="argo" />
-                  </li>
-                  <li className="carousel__item">
-                    <img
-                      className="carousel__image"
-                      src={CRONOS}
-                      alt="cronos"
-                    />
-                  </li>
-                  <li className="carousel__item">
-                    <img
-                      className="carousel__image"
-                      src={DUCATO}
-                      alt="ducato"
-                    />
-                  </li>
-                  <li className="carousel__item">
-                    <img
-                      className="carousel__image"
-                      src={FIAT500}
-                      alt="fiat500"
-                    />
-                  </li>
-                  <li className="carousel__item">
-                    <img
-                      className="carousel__image"
-                      src={FIORINO}
-                      alt="fiorino"
-                    />
-                  </li>
-                  <li className="carousel__item">
-                    <img className="carousel__image" src={LINEA} alt="linea" />
-                  </li>
-                  <li className="carousel__item">
-                    <img className="carousel__image" src={MAREA} alt="marea" />
-                  </li>
-                  <li className="carousel__item">
-                    <img
-                      className="carousel__image"
-                      src={RENEGADE}
-                      alt="renegade"
-                    />
-                  </li>
-                  <li className="carousel__item">
-                    <img className="carousel__image" src={TORO} alt="toro" />
-                  </li>
-                </ul>
-                <div className="carousel__nav">
-                  <button
-                    type="button"
-                    aria-label="slide-0"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 0 && 'active'
-                    }`}
-                    onClick={() => selectSlide(0)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-1"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 1 && 'active'
-                    }`}
-                    onClick={() => selectSlide(1)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-2"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 2 && 'active'
-                    }`}
-                    onClick={() => selectSlide(2)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-3"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 3 && 'active'
-                    }`}
-                    onClick={() => selectSlide(3)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-4"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 4 && 'active'
-                    }`}
-                    onClick={() => selectSlide(4)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-5"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 5 && 'active'
-                    }`}
-                    onClick={() => selectSlide(5)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-6"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 6 && 'active'
-                    }`}
-                    onClick={() => selectSlide(6)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-7"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 7 && 'active'
-                    }`}
-                    onClick={() => selectSlide(7)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="slide-8"
-                    className={`carousel__nav-indicator ${
-                      currentSlide === 8 && 'active'
-                    }`}
-                    onClick={() => selectSlide(8)}
-                  />
-                </div>
-              </div>
-              <p>{carouselCaptions[currentSlide]}</p>
+          <Step>
+            <div>
+              <HeadingPrimary>Carro</HeadingPrimary>
+              <ParagraphPrimary>Qual foi o carro testado?</ParagraphPrimary>
             </div>
-          </section>
+            <div
+              style={{
+                width: 'min(60vw, 60rem)',
+                margin: '4.8rem auto 0',
+              }}
+            >
+              <div className="carousel__container">
+                <div className="carousel__wrapper">
+                  <button
+                    className="carousel__slide-button left"
+                    type="button"
+                    onClick={() => previousSlide()}
+                    disabled={currentSlide === 0}
+                  >
+                    &#10094;
+                  </button>
+                  <button
+                    className="carousel__slide-button right"
+                    type="button"
+                    onClick={() => nextSlide()}
+                    disabled={currentSlide === 8}
+                  >
+                    &#10095;
+                  </button>
+                  <ul
+                    className="carousel__slider"
+                    ref={trackRef}
+                    onTouchEnd={() => selectSlideUsingTouch()}
+                  >
+                    <li className="carousel__item">
+                      <img className="carousel__image" src={ARGO} alt="argo" />
+                    </li>
+                    <li className="carousel__item">
+                      <img
+                        className="carousel__image"
+                        src={CRONOS}
+                        alt="cronos"
+                      />
+                    </li>
+                    <li className="carousel__item">
+                      <img
+                        className="carousel__image"
+                        src={DUCATO}
+                        alt="ducato"
+                      />
+                    </li>
+                    <li className="carousel__item">
+                      <img
+                        className="carousel__image"
+                        src={FIAT500}
+                        alt="fiat500"
+                      />
+                    </li>
+                    <li className="carousel__item">
+                      <img
+                        className="carousel__image"
+                        src={FIORINO}
+                        alt="fiorino"
+                      />
+                    </li>
+                    <li className="carousel__item">
+                      <img
+                        className="carousel__image"
+                        src={LINEA}
+                        alt="linea"
+                      />
+                    </li>
+                    <li className="carousel__item">
+                      <img
+                        className="carousel__image"
+                        src={MAREA}
+                        alt="marea"
+                      />
+                    </li>
+                    <li className="carousel__item">
+                      <img
+                        className="carousel__image"
+                        src={RENEGADE}
+                        alt="renegade"
+                      />
+                    </li>
+                    <li className="carousel__item">
+                      <img className="carousel__image" src={TORO} alt="toro" />
+                    </li>
+                  </ul>
+                  <div className="carousel__nav">
+                    <button
+                      type="button"
+                      aria-label="slide-0"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 0 && 'active'
+                      }`}
+                      onClick={() => selectSlide(0)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-1"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 1 && 'active'
+                      }`}
+                      onClick={() => selectSlide(1)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-2"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 2 && 'active'
+                      }`}
+                      onClick={() => selectSlide(2)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-3"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 3 && 'active'
+                      }`}
+                      onClick={() => selectSlide(3)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-4"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 4 && 'active'
+                      }`}
+                      onClick={() => selectSlide(4)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-5"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 5 && 'active'
+                      }`}
+                      onClick={() => selectSlide(5)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-6"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 6 && 'active'
+                      }`}
+                      onClick={() => selectSlide(6)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-7"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 7 && 'active'
+                      }`}
+                      onClick={() => selectSlide(7)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="slide-8"
+                      className={`carousel__nav-indicator ${
+                        currentSlide === 8 && 'active'
+                      }`}
+                      onClick={() => selectSlide(8)}
+                    />
+                  </div>
+                </div>
+                <HeadingPrimary>
+                  {carouselCaptions[currentSlide]}
+                </HeadingPrimary>
+              </div>
+            </div>
+          </Step>
         )}
         {currentStep === 2 && (
           <section
