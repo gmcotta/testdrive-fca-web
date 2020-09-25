@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Box, Label } from './styles';
+import { Container, Wrapper, Box, Label } from './styles';
 
 type CheckboxProps = React.HTMLProps<HTMLInputElement> & {
   label: string;
@@ -21,7 +21,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
 }) => {
   return (
     <Container>
-      <>
+      <Wrapper>
         <input
           type="checkbox"
           name={name}
@@ -37,7 +37,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           </Box>
           <Label>{label}</Label>
         </label>
-      </>
+      </Wrapper>
       {hasError && <span>{errorMessage}</span>}
     </Container>
   );

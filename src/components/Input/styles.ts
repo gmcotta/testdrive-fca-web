@@ -31,7 +31,7 @@ export const Container = styled.div<InputProps>`
   }
 
   > span {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     color: var(--color-red);
     font-weight: 500;
     margin-top: 0.8rem;
