@@ -23,6 +23,7 @@ import './styles.css';
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
 import Input from '../../components/Input';
 import Checkbox from '../../components/Checkbox';
+import { StepperFooter } from './styles';
 
 type FormValues = {
   identification: string;
@@ -572,7 +573,7 @@ const StepperForm = () => {
         </section>
       )}
 
-      <footer>
+      <StepperFooter>
         <button
           type="button"
           onClick={() => prevStep()}
@@ -581,7 +582,7 @@ const StepperForm = () => {
           Voltar
         </button>
         <button type="submit">Avançar</button>
-      </footer>
+      </StepperFooter>
     </form>
   );
 };

@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
     }
 
     &:disabled ~ label {
-      cursor: default;
+      cursor: not-allowed;
     }
 
     &:disabled ~ label div {

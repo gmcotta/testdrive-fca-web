@@ -27,6 +27,7 @@ export const Container = styled.div<InputProps>`
     &:disabled {
       background-color: var(--color-gray-light);
       border-color: var(--color-gray);
+      cursor: not-allowed;
     }
   }
 
