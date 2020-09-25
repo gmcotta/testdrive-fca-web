@@ -17,8 +17,11 @@ import MAREA from '../../assets/carrossel_marea.png';
 import RENEGADE from '../../assets/carrossel_renegade.png';
 import TORO from '../../assets/carrossel_toro.png';
 
-import './styles.css';
 import Button from '../../components/Button';
+import Header from '../../components/Header';
+import './styles.css';
+import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
+import Input from '../../components/Input';
 
 type FormValues = {
   identification: string;
@@ -32,40 +35,55 @@ type RecommendationType = {
 };
 
 const StepperForm = () => {
-  const initialValues = {
-    identification: '',
-    anonymous: false,
-    car: '',
-    text: '',
-  };
-  const initialErrors = {
-    identification: '',
-    anonymous: '',
-    car: '',
-    text: '',
-  };
-  const initialTouched = {
-    identification: false,
-    anonymous: false,
-    car: false,
-    text: false,
-  };
-  const initialResult = {
-    recommendation: '',
-    entities: [],
-  };
+  const initialValues = useMemo(
+    () => ({
+      identification: '',
+      anonymous: false,
+      car: '',
+      text: '',
+    }),
+    [],
+  );
+
+  const initialErrors = useMemo(
+    () => ({
+      identification: '',
+      anonymous: '',
+      car: '',
+      text: '',
+    }),
+    [],
+  );
+
+  const initialTouched = useMemo(
+    () => ({
+      identification: false,
+      anonymous: false,
+      car: false,
+      text: false,
+    }),
+    [],
+  );
+
+  const initialResult = useMemo(
+    () => ({
+      recommendation: '',
+      entities: [],
+    }),
+    [],
+  );
 
   const carPhotos: RecommendationType = useMemo(
     () => ({
-      ARGO: ARGO,
-      CRONOS: CRONOS,
-      DUCATO: DUCATO,
-      FIAT500: FIAT500,
-      FIORINO: FIORINO,
-      LINEA: LINEA,
-      MAREA: MAREA,
-      RENEGADE: RENEGADE,
-      TORO: TORO
+      ARGO,
+      CRONOS,
+      DUCATO,
+      FIAT500,
+      FIORINO,
+      LINEA,
+      MAREA,
+      RENEGADE,
+      TORO,
     }),
     [],
   );
@@ -100,16 +118,16 @@ const StepperForm = () => {
     [],
   );
 
+  const commentMaxLength = useMemo(() => 200, []);
+
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
-  const [carPhoto, setCarPhoto] = useState('');
-
   const [currentStep, setCurrentStep] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
+
   const trackRef = useRef<HTMLUListElement>(null);
-  const commentMaxLength = 200;
 
   const defineErrorMessage = useCallback((key, message) => {
     setErrors(oldErrors => ({
@@ -117,30 +135,6 @@ const StepperForm = () => {
       [key]: message,
     }));
   }, []);
-
-  // Set error messages
-  useEffect(() => {
-    if (!values.identification && !values.anonymous) {
-      defineErrorMessage('identification', 'Necessário preencher uma opção.');
-    }
-    if (values.identification || values.anonymous) {
-      defineErrorMessage('identification', '');
-    }
-
-    if (!values.car) {
-      defineErrorMessage('car', 'Necessário escolher um carro.');
-    }
-    if (values.car) {
-      defineErrorMessage('car', '');
-    }
-
-    if (!values.text) {
-      defineErrorMessage('text', 'Necessário fazer um comentário.');
-    }
-    if (values.text) {
-      defineErrorMessage('text', '');
-    }
-  }, [values, defineErrorMessage]);
 
   const handleChange = useCallback(
     event => {
@@ -177,7 +171,7 @@ const StepperForm = () => {
     setCurrentStep(oldStep => oldStep + 1);
   }, []);
 
-  const selectStep = useCallback((stepNumber) => {
+  const selectStep = useCallback(stepNumber => {
     setCurrentStep(stepNumber);
   }, []);
 
@@ -204,28 +198,6 @@ const StepperForm = () => {
       }
     }, 300);
   }, []);
-
-  // Carousel mechanics
-  useEffect(() => {
-    if (trackRef.current !== null) {
-      const slideWidth = trackRef.current.offsetWidth;
-      return trackRef.current.scrollTo(currentSlide * slideWidth, 0);
-    }
-    return undefined;
-  }, [currentSlide, trackRef]);
-
-  // Set current car on form
-  useEffect(() => {
-    const currentCarOnCarousel = carouselCaptions[currentSlide];
-    const carList = Object.keys(recommendedCars);
-    const car = carList.find(
-      key => recommendedCars[key] === currentCarOnCarousel,
-    );
-
-    if (car !== undefined) {
-      setValues(oldValues => ({ ...oldValues, car }));
-    }
-  }, [setValues, carouselCaptions, currentSlide, recommendedCars]);
 
   const handleSubmit = useCallback(
     event => {
@@ -278,8 +250,10 @@ const StepperForm = () => {
             api
               .post('/api/v1/recommend', { car: values.car, text: values.text })
               .then(response => {
-                const recommendationWithoutSpace = response.data.recommendation.replace(' ', '');
-                console.log(recommendationWithoutSpace);
+                const recommendationWithoutSpace = response.data.recommendation.replace(
+                  ' ',
+                  '',
+                );
                 setApiResults({
                   recommendation: recommendationWithoutSpace,
                   entities: response.data.entities,
@@ -293,13 +267,73 @@ const StepperForm = () => {
           break;
       }
     },
-    [currentStep, nextStep, errors, setTouched, values, defineErrorMessage, selectStep],
+    [
+      currentStep,
+      nextStep,
+      errors,
+      setTouched,
+      values,
+      defineErrorMessage,
+      selectStep,
+    ],
   );
+
+  // Set error messages
+  useEffect(() => {
+    if (!values.identification && !values.anonymous) {
+      defineErrorMessage('identification', 'Necessário preencher uma opção.');
+    }
+    if (values.identification || values.anonymous) {
+      defineErrorMessage('identification', '');
+    }
+
+    if (!values.car) {
+      defineErrorMessage('car', 'Necessário escolher um carro.');
+    }
+    if (values.car) {
+      defineErrorMessage('car', '');
+    }
+
+    if (!values.text) {
+      defineErrorMessage('text', 'Necessário fazer um comentário.');
+    }
+    if (values.text) {
+      defineErrorMessage('text', '');
+    }
+  }, [values, defineErrorMessage]);
+
+  // Carousel mechanics
+  useEffect(() => {
+    if (trackRef.current !== null) {
+      const slideWidth = trackRef.current.offsetWidth;
+      return trackRef.current.scrollTo(currentSlide * slideWidth, 0);
+    }
+    return undefined;
+  }, [currentSlide, trackRef]);
+
+  // Set current car on form
+  useEffect(() => {
+    const currentCarOnCarousel = carouselCaptions[currentSlide];
+    const carList = Object.keys(recommendedCars);
+    const car = carList.find(
+      key => recommendedCars[key] === currentCarOnCarousel,
+    );
+
+    if (car !== undefined) {
+      setValues(oldValues => ({ ...oldValues, car }));
+    }
+  }, [setValues, carouselCaptions, currentSlide, recommendedCars]);
 
   return (
     <form onSubmit={event => handleSubmit(event)}>
-      <header>Formulário</header>
       <section className={`section--${currentStep === 0 ? 'active' : 'hide'}`}>
+        <HeadingPrimary>Identificação</HeadingPrimary>
+        <ParagraphPrimary>
+          Digite seu código de identificação emitido no agendamento.
+        </ParagraphPrimary>
+        <ParagraphPrimary>
+          Caso queira, também pode fazer a avaliação de maneira anônima.
+        </ParagraphPrimary>
         <label htmlFor="identification">Identificação</label>
         <input
           type="text"
@@ -313,6 +347,22 @@ const StepperForm = () => {
         {touched.identification &&
           errors.identification &&
           !values.anonymous && <span>{errors.identification}</span>}
+
+        <Input
+          id="identification"
+          label="Identificação"
+          name="identification"
+          onChange={event => handleChange(event)}
+          onBlur={event => handleBlur(event)}
+          disabled={!!values.anonymous}
+          errorMessage={errors.identification}
+          hasError={
+            !!touched.identification &&
+            !!errors.identification &&
+            !values.anonymous
+          }
+          touched={touched.identification}
+        />
 
         <input
           type="checkbox"
@@ -478,7 +528,7 @@ const StepperForm = () => {
         <h1>Obrigado</h1>
         {apiResults.recommendation && (
           <>
-            <p>{'Que pena que você não gostou do carro :('}</p>
+            <p>Que pena que você não gostou do carro :(</p>
             <p>
               {`Caso queira realizar um novo test drive conosco,
             sugerimos o ${recommendedCars[apiResults.recommendation]}.`}
@@ -496,7 +546,10 @@ const StepperForm = () => {
           <>
             <p>Maravilha! Ficamos felizes que tenha gostado!</p>
             <p>Caso tenha se identificado, entraremos em contato.</p>
-            <img src={carPhotos[values.car]} alt={recommendedCars[values.car]}/>
+            <img
+              src={carPhotos[values.car]}
+              alt={recommendedCars[values.car]}
+            />
             <p>{recommendedCars[values.car]}</p>
           </>
         )}
@@ -525,7 +578,7 @@ const StepperForm = () => {
 const TesteStepper: React.FC = () => {
   return (
     <div>
-      <header>TesteStepper</header>
+      <Header description="Avaliação" />
       <StepperForm />
     </div>
   );

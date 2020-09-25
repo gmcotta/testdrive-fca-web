@@ -20,12 +20,12 @@ const Review: React.FC = () => {
           Caso queira, também pode fazer a avaliação de maneira anônima.
         </ParagraphPrimary>
 
-        <Input
+        {/* <Input
           id="identification"
           name="identification"
           label="Identificação"
           error="Teste erro"
-        />
+        /> */}
 
         <Checkbox
           id="anonymous"
