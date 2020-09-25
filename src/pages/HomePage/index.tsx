@@ -14,7 +14,6 @@ import {
   HomeButton,
   Title,
   ImageWrapper,
-  Shape,
   Content,
 } from './styles';
 

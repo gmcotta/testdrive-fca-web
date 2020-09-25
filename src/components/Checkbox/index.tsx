@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdCheck } from 'react-icons/md';
 
 import { Container, Wrapper, Box, Label } from './styles';
 
@@ -33,7 +34,9 @@ const Checkbox: React.FC<CheckboxProps> = ({
         />
         <label htmlFor={id}>
           <Box>
-            <span>&#10003;</span>
+            <span>
+              <MdCheck size={12} />
+            </span>
           </Box>
           <Label>{label}</Label>
         </label>

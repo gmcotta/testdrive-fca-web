@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: inline-block;
+  margin: 0.8rem 0;
 `;
 
 export const Wrapper = styled.div`
@@ -15,7 +16,9 @@ export const Wrapper = styled.div`
       background-color: var(--color-primary);
 
       & span {
-        display: inline;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 

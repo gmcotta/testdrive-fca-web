@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import Stepper from '../../components/Stepper';
 import Identification from '../Review/Steps/Identification';
@@ -27,8 +27,6 @@ const Appointment: React.FC = () => {
       page: <Comment />,
     },
   ];
-
-  const [formValues, setFormValues] = useState(values);
 
   return (
     <div>

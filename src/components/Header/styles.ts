@@ -6,6 +6,7 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 32px;
+  height: 5.6rem;
 `;
 
 export const LogoWrapper = styled.div`

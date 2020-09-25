@@ -1,8 +1,38 @@
 import styled from 'styled-components';
+import Checkbox from '../../components/Checkbox';
+import Input from '../../components/Input';
+
+export const StepperForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 88rem;
+  height: calc(100% - 5.6rem - 0.8rem);
+  margin: 0.8rem auto 0;
+  padding-top: 0.8rem;
+  border-top: 2px solid var(--color-primary);
+`;
+
+export const Step = styled.section``;
+
+export const FormGroup = styled.div`
+  margin-top: 4.8rem;
+  width: 40rem;
+`;
+
+export const FormInput = styled(Input)`
+  margin-top: 4.8rem;
+  width: 40vw;
+`;
+
+export const FormCheckbox = styled(Checkbox)`
+  margin-top: 1.6rem;
+`;
 
 export const StepperFooter = styled.footer`
-  border-top: 1px solid var(--color-primary);
+  border-top: 2px solid var(--color-primary);
   padding-top: 1.6rem;
+  margin-bottom: 1.6rem;
   display: flex;
   justify-content: space-between;
 
