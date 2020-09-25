@@ -14,6 +14,15 @@ export const Container = styled.div`
         display: inline;
       }
     }
+
+    &:disabled ~ label {
+      cursor: default;
+    }
+
+    &:disabled ~ label div {
+      background-color: var(--color-gray-light);
+      border-color: var(--color-gray);
+    }
   }
 
   > label {

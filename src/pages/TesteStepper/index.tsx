@@ -22,6 +22,7 @@ import Header from '../../components/Header';
 import './styles.css';
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
 import Input from '../../components/Input';
+import Checkbox from '../../components/Checkbox';
 
 type FormValues = {
   identification: string;
@@ -281,7 +282,7 @@ const StepperForm = () => {
   // Set error messages
   useEffect(() => {
     if (!values.identification && !values.anonymous) {
-      defineErrorMessage('identification', 'Necessário preencher uma opção.');
+      defineErrorMessage('identification', 'Necessário preencher seu código.');
     }
     if (values.identification || values.anonymous) {
       defineErrorMessage('identification', '');
@@ -326,241 +327,251 @@ const StepperForm = () => {
 
   return (
     <form onSubmit={event => handleSubmit(event)}>
-      <section className={`section--${currentStep === 0 ? 'active' : 'hide'}`}>
-        <HeadingPrimary>Identificação</HeadingPrimary>
-        <ParagraphPrimary>
-          Digite seu código de identificação emitido no agendamento.
-        </ParagraphPrimary>
-        <ParagraphPrimary>
-          Caso queira, também pode fazer a avaliação de maneira anônima.
-        </ParagraphPrimary>
-        <label htmlFor="identification">Identificação</label>
-        <input
-          type="text"
-          name="identification"
-          id="identification"
-          value={values.identification}
-          onChange={event => handleChange(event)}
-          onBlur={event => handleBlur(event)}
-          disabled={!!values.anonymous}
-        />
-        {touched.identification &&
-          errors.identification &&
-          !values.anonymous && <span>{errors.identification}</span>}
-
-        <Input
-          id="identification"
-          label="Identificação"
-          name="identification"
-          onChange={event => handleChange(event)}
-          onBlur={event => handleBlur(event)}
-          disabled={!!values.anonymous}
-          errorMessage={errors.identification}
-          hasError={
-            !!touched.identification &&
-            !!errors.identification &&
-            !values.anonymous
-          }
-          touched={touched.identification}
-        />
-
-        <input
-          type="checkbox"
-          name="anonymous"
-          id="anonymous"
-          checked={values.anonymous}
-          onChange={event => handleChange(event)}
-          onBlur={event => handleBlur(event)}
-          disabled={!!values.identification}
-        />
-        <label htmlFor="anonymous">Quero avaliar anonimamente</label>
-      </section>
-      <section className={`section--${currentStep === 1 ? 'active' : 'hide'}`}>
-        <div className="carousel__container">
-          <div className="carousel__wrapper">
-            <button
-              className="carousel__slide-button left"
-              type="button"
-              onClick={() => previousSlide()}
-              disabled={currentSlide === 0}
-            >
-              &#10094;
-            </button>
-            <button
-              className="carousel__slide-button right"
-              type="button"
-              onClick={() => nextSlide()}
-              disabled={currentSlide === 8}
-            >
-              &#10095;
-            </button>
-            <ul
-              className="carousel__slider"
-              ref={trackRef}
-              onTouchEnd={() => selectSlideUsingTouch()}
-            >
-              <li className="carousel__item">
-                <img className="carousel__image" src={ARGO} alt="argo" />
-              </li>
-              <li className="carousel__item">
-                <img className="carousel__image" src={CRONOS} alt="cronos" />
-              </li>
-              <li className="carousel__item">
-                <img className="carousel__image" src={DUCATO} alt="ducato" />
-              </li>
-              <li className="carousel__item">
-                <img className="carousel__image" src={FIAT500} alt="fiat500" />
-              </li>
-              <li className="carousel__item">
-                <img className="carousel__image" src={FIORINO} alt="fiorino" />
-              </li>
-              <li className="carousel__item">
-                <img className="carousel__image" src={LINEA} alt="linea" />
-              </li>
-              <li className="carousel__item">
-                <img className="carousel__image" src={MAREA} alt="marea" />
-              </li>
-              <li className="carousel__item">
-                <img
-                  className="carousel__image"
-                  src={RENEGADE}
-                  alt="renegade"
+      {currentStep === 0 && (
+        <section
+          className={`section--${currentStep === 0 ? 'active' : 'hide'}`}
+        >
+          <HeadingPrimary>Identificação</HeadingPrimary>
+          <ParagraphPrimary>
+            Digite seu código de identificação emitido no agendamento.
+          </ParagraphPrimary>
+          <ParagraphPrimary>
+            Caso queira, também pode fazer a avaliação de maneira anônima.
+          </ParagraphPrimary>
+          <Input
+            id="identification"
+            label="Identificação"
+            name="identification"
+            onChange={event => handleChange(event)}
+            onBlur={event => handleBlur(event)}
+            disabled={!!values.anonymous}
+            errorMessage={errors.identification}
+            value={values.identification}
+            hasError={
+              touched.identification &&
+              !!errors.identification &&
+              !values.anonymous
+            }
+            touched={touched.identification}
+          />
+          <Checkbox
+            id="anonymous"
+            label="Quero avaliar anonimamente"
+            name="anonymous"
+            checked={values.anonymous}
+            onChange={event => handleChange(event)}
+            onBlur={event => handleBlur(event)}
+            disabled={!!values.identification}
+          />
+        </section>
+      )}
+      {currentStep === 1 && (
+        <section
+          className={`section--${currentStep === 1 ? 'active' : 'hide'}`}
+        >
+          <div className="carousel__container">
+            <div className="carousel__wrapper">
+              <button
+                className="carousel__slide-button left"
+                type="button"
+                onClick={() => previousSlide()}
+                disabled={currentSlide === 0}
+              >
+                &#10094;
+              </button>
+              <button
+                className="carousel__slide-button right"
+                type="button"
+                onClick={() => nextSlide()}
+                disabled={currentSlide === 8}
+              >
+                &#10095;
+              </button>
+              <ul
+                className="carousel__slider"
+                ref={trackRef}
+                onTouchEnd={() => selectSlideUsingTouch()}
+              >
+                <li className="carousel__item">
+                  <img className="carousel__image" src={ARGO} alt="argo" />
+                </li>
+                <li className="carousel__item">
+                  <img className="carousel__image" src={CRONOS} alt="cronos" />
+                </li>
+                <li className="carousel__item">
+                  <img className="carousel__image" src={DUCATO} alt="ducato" />
+                </li>
+                <li className="carousel__item">
+                  <img
+                    className="carousel__image"
+                    src={FIAT500}
+                    alt="fiat500"
+                  />
+                </li>
+                <li className="carousel__item">
+                  <img
+                    className="carousel__image"
+                    src={FIORINO}
+                    alt="fiorino"
+                  />
+                </li>
+                <li className="carousel__item">
+                  <img className="carousel__image" src={LINEA} alt="linea" />
+                </li>
+                <li className="carousel__item">
+                  <img className="carousel__image" src={MAREA} alt="marea" />
+                </li>
+                <li className="carousel__item">
+                  <img
+                    className="carousel__image"
+                    src={RENEGADE}
+                    alt="renegade"
+                  />
+                </li>
+                <li className="carousel__item">
+                  <img className="carousel__image" src={TORO} alt="toro" />
+                </li>
+              </ul>
+              <div className="carousel__nav">
+                <button
+                  type="button"
+                  aria-label="slide-0"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 0 && 'active'
+                  }`}
+                  onClick={() => selectSlide(0)}
                 />
-              </li>
-              <li className="carousel__item">
-                <img className="carousel__image" src={TORO} alt="toro" />
-              </li>
-            </ul>
-            <div className="carousel__nav">
-              <button
-                type="button"
-                aria-label="slide-0"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 0 && 'active'
-                }`}
-                onClick={() => selectSlide(0)}
-              />
-              <button
-                type="button"
-                aria-label="slide-1"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 1 && 'active'
-                }`}
-                onClick={() => selectSlide(1)}
-              />
-              <button
-                type="button"
-                aria-label="slide-2"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 2 && 'active'
-                }`}
-                onClick={() => selectSlide(2)}
-              />
-              <button
-                type="button"
-                aria-label="slide-3"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 3 && 'active'
-                }`}
-                onClick={() => selectSlide(3)}
-              />
-              <button
-                type="button"
-                aria-label="slide-4"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 4 && 'active'
-                }`}
-                onClick={() => selectSlide(4)}
-              />
-              <button
-                type="button"
-                aria-label="slide-5"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 5 && 'active'
-                }`}
-                onClick={() => selectSlide(5)}
-              />
-              <button
-                type="button"
-                aria-label="slide-6"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 6 && 'active'
-                }`}
-                onClick={() => selectSlide(6)}
-              />
-              <button
-                type="button"
-                aria-label="slide-7"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 7 && 'active'
-                }`}
-                onClick={() => selectSlide(7)}
-              />
-              <button
-                type="button"
-                aria-label="slide-8"
-                className={`carousel__nav-indicator ${
-                  currentSlide === 8 && 'active'
-                }`}
-                onClick={() => selectSlide(8)}
-              />
+                <button
+                  type="button"
+                  aria-label="slide-1"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 1 && 'active'
+                  }`}
+                  onClick={() => selectSlide(1)}
+                />
+                <button
+                  type="button"
+                  aria-label="slide-2"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 2 && 'active'
+                  }`}
+                  onClick={() => selectSlide(2)}
+                />
+                <button
+                  type="button"
+                  aria-label="slide-3"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 3 && 'active'
+                  }`}
+                  onClick={() => selectSlide(3)}
+                />
+                <button
+                  type="button"
+                  aria-label="slide-4"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 4 && 'active'
+                  }`}
+                  onClick={() => selectSlide(4)}
+                />
+                <button
+                  type="button"
+                  aria-label="slide-5"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 5 && 'active'
+                  }`}
+                  onClick={() => selectSlide(5)}
+                />
+                <button
+                  type="button"
+                  aria-label="slide-6"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 6 && 'active'
+                  }`}
+                  onClick={() => selectSlide(6)}
+                />
+                <button
+                  type="button"
+                  aria-label="slide-7"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 7 && 'active'
+                  }`}
+                  onClick={() => selectSlide(7)}
+                />
+                <button
+                  type="button"
+                  aria-label="slide-8"
+                  className={`carousel__nav-indicator ${
+                    currentSlide === 8 && 'active'
+                  }`}
+                  onClick={() => selectSlide(8)}
+                />
+              </div>
             </div>
+            <p>{carouselCaptions[currentSlide]}</p>
           </div>
-          <p>{carouselCaptions[currentSlide]}</p>
-        </div>
-      </section>
-      <section className={`section--${currentStep === 2 ? 'active' : 'hide'}`}>
-        <label htmlFor="text">Comentário</label>
-        <textarea
-          name="text"
-          id="text"
-          cols={80}
-          rows={5}
-          maxLength={commentMaxLength}
-          value={values.text}
-          onChange={event => handleChange(event)}
-          onBlur={event => handleBlur(event)}
-        />
-        <span>{`${values.text.length}/${commentMaxLength}`}</span>
-        {touched.text && errors.text && <span>{errors.text}</span>}
-      </section>
-      <section className={`section--${currentStep === 3 ? 'active' : 'hide'}`}>
-        <h1>Obrigado</h1>
-        {apiResults.recommendation && (
-          <>
-            <p>Que pena que você não gostou do carro :(</p>
-            <p>
-              {`Caso queira realizar um novo test drive conosco,
+        </section>
+      )}
+      {currentStep === 2 && (
+        <section
+          className={`section--${currentStep === 2 ? 'active' : 'hide'}`}
+        >
+          <label htmlFor="text">Comentário</label>
+          <textarea
+            name="text"
+            id="text"
+            cols={80}
+            rows={5}
+            maxLength={commentMaxLength}
+            value={values.text}
+            onChange={event => handleChange(event)}
+            onBlur={event => handleBlur(event)}
+          />
+          <span>{`${values.text.length}/${commentMaxLength}`}</span>
+          {touched.text && errors.text && <span>{errors.text}</span>}
+        </section>
+      )}
+      {currentStep === 3 && (
+        <section
+          className={`section--${currentStep === 3 ? 'active' : 'hide'}`}
+        >
+          <h1>Obrigado</h1>
+          {apiResults.recommendation && (
+            <>
+              <p>Que pena que você não gostou do carro :(</p>
+              <p>
+                {`Caso queira realizar um novo test drive conosco,
             sugerimos o ${recommendedCars[apiResults.recommendation]}.`}
-            </p>
-            <img
-              src={carPhotos[apiResults.recommendation]}
-              alt={recommendedCars[apiResults.recommendation]}
-            />
-            <p>{recommendedCars[apiResults.recommendation]}</p>
+              </p>
+              <img
+                src={carPhotos[apiResults.recommendation]}
+                alt={recommendedCars[apiResults.recommendation]}
+              />
+              <p>{recommendedCars[apiResults.recommendation]}</p>
 
-            <Button to="/review">Agendar test drive</Button>
-          </>
-        )}
-        {!apiResults.recommendation && apiResults.entities.length && (
-          <>
-            <p>Maravilha! Ficamos felizes que tenha gostado!</p>
-            <p>Caso tenha se identificado, entraremos em contato.</p>
-            <img
-              src={carPhotos[values.car]}
-              alt={recommendedCars[values.car]}
-            />
-            <p>{recommendedCars[values.car]}</p>
-          </>
-        )}
-        {!apiResults.recommendation && !apiResults.entities.length && (
-          <>
-            <p>Não conseguimos processar seu comentário...</p>
-            <p>Por favor, tente novamente mais tarde.</p>
-          </>
-        )}
-        <h1>{JSON.stringify(apiResults, null, 2)}</h1>
-      </section>
+              <Button to="/review">Agendar test drive</Button>
+            </>
+          )}
+          {!apiResults.recommendation && apiResults.entities.length && (
+            <>
+              <p>Maravilha! Ficamos felizes que tenha gostado!</p>
+              <p>Caso tenha se identificado, entraremos em contato.</p>
+              <img
+                src={carPhotos[values.car]}
+                alt={recommendedCars[values.car]}
+              />
+              <p>{recommendedCars[values.car]}</p>
+            </>
+          )}
+          {!apiResults.recommendation && !apiResults.entities.length && (
+            <>
+              <p>Não conseguimos processar seu comentário...</p>
+              <p>Por favor, tente novamente mais tarde.</p>
+            </>
+          )}
+          <h1>{JSON.stringify(apiResults, null, 2)}</h1>
+        </section>
+      )}
+
       <footer>
         <button
           type="button"

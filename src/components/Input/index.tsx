@@ -13,6 +13,7 @@ const Input: React.FC<InputProps> = ({
   id,
   label,
   name,
+  value,
   placeholder,
   hasError,
   errorMessage,
@@ -27,6 +28,7 @@ const Input: React.FC<InputProps> = ({
         type="text"
         name={name}
         id={id}
+        value={value}
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
