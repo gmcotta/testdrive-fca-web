@@ -22,7 +22,7 @@ import Header from '../../components/Header';
 import './styles.css';
 
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
-import { StepperFooter, StepperForm, Step, FormGroup, TextareaWrapper } from './styles';
+import { StepperFooter, StepperForm, Step, FormGroup, TextareaWrapper, PhotoWrapper } from './styles';
 import Textarea from '../../components/Textarea';
 import Input from '../../components/Input';
 import Checkbox from '../../components/Checkbox';
@@ -69,19 +69,10 @@ const Form = () => {
     [],
   );
 
-  // const initialResult = useMemo(
-  //   () => ({
-  //     recommendation: '',
-  //     entities: [],
-  //   }),
-  //   [],
-  // );
   const initialResult = useMemo(
     () => ({
-      recommendation: 'MAREA',
-      entities: [
-        { entity: 'DESEMPENHO', sentiment: -0.940702, mention: 'desempenho' },
-      ],
+      recommendation: '',
+      entities: [],
     }),
     [],
   );
@@ -137,7 +128,7 @@ const Form = () => {
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(3);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const trackRef = useRef<HTMLUListElement>(null);
@@ -582,45 +573,66 @@ const Form = () => {
           </Step>
         )}
         {currentStep === 3 && (
-          <section
-            className={`section--${currentStep === 3 ? 'active' : 'hide'}`}
-          >
-            <h1>Obrigado</h1>
+          <Step>
+            <div>
+              <HeadingPrimary>Obrigado</HeadingPrimary>
+
+                {apiResults.recommendation && (
+                  <>
+                    <ParagraphPrimary>
+                      Que pena que você não gostou do carro &#58;&#8317;
+                    </ParagraphPrimary>
+                    <ParagraphPrimary>
+                      {`Caso queira realizar um novo test drive conosco,
+                    sugerimos o ${recommendedCars[apiResults.recommendation]}.`}
+                    </ParagraphPrimary>
+                  </>
+                )}
+
+                {!apiResults.recommendation && apiResults.entities.length && (
+                  <>
+                    <ParagraphPrimary>
+                      Maravilha! Ficamos felizes que tenha gostado!
+                    </ParagraphPrimary>
+                    <ParagraphPrimary>
+                      Caso tenha se identificado, entraremos em contato.
+                    </ParagraphPrimary>
+                  </>
+                )}
+
+                {!apiResults.recommendation && !apiResults.entities.length && (
+                  <>
+                    <ParagraphPrimary>
+                      Não conseguimos processar seu comentário...
+                    </ParagraphPrimary>
+                    <ParagraphPrimary>
+                      Por favor, tente novamente mais tarde.
+                    </ParagraphPrimary>
+                  </>
+                )}
+            </div>
+
             {apiResults.recommendation && (
-              <>
-                <p>Que pena que você não gostou do carro :(</p>
-                <p>
-                  {`Caso queira realizar um novo test drive conosco,
-              sugerimos o ${recommendedCars[apiResults.recommendation]}.`}
-                </p>
+              <PhotoWrapper>
                 <img
                   src={carPhotos[apiResults.recommendation]}
                   alt={recommendedCars[apiResults.recommendation]}
                 />
-                <p>{recommendedCars[apiResults.recommendation]}</p>
+                <HeadingPrimary>{recommendedCars[apiResults.recommendation]}</HeadingPrimary>
 
                 <Button to="/review">Agendar test drive</Button>
-              </>
+              </PhotoWrapper>
             )}
             {!apiResults.recommendation && apiResults.entities.length && (
-              <>
-                <p>Maravilha! Ficamos felizes que tenha gostado!</p>
-                <p>Caso tenha se identificado, entraremos em contato.</p>
+              <PhotoWrapper>
                 <img
                   src={carPhotos[values.car]}
                   alt={recommendedCars[values.car]}
                 />
-                <p>{recommendedCars[values.car]}</p>
-              </>
+                <HeadingPrimary>{recommendedCars[values.car]}</HeadingPrimary>
+              </PhotoWrapper>
             )}
-            {!apiResults.recommendation && !apiResults.entities.length && (
-              <>
-                <p>Não conseguimos processar seu comentário...</p>
-                <p>Por favor, tente novamente mais tarde.</p>
-              </>
-            )}
-            <h1>{JSON.stringify(apiResults, null, 2)}</h1>
-          </section>
+          </Step>
         )}
       </>
 

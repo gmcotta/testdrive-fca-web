@@ -59,3 +59,18 @@ export const StepperFooter = styled.footer`
     }
   }
 `;
+
+export const PhotoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4.8rem;
+
+  > img {
+    width: min(50vw, 56rem);
+  }
+
+  > a {
+    margin-top: 2.4rem;
+  }
+`;
