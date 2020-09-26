@@ -10,7 +10,6 @@ export const StepperForm = styled.form`
   height: calc(100% - 5.6rem - 0.8rem);
   margin: 0.8rem auto 0;
   padding: 0.8rem;
-  border-top: 2px solid var(--color-primary);
 `;
 
 export const Step = styled.section``;
@@ -18,6 +17,10 @@ export const Step = styled.section``;
 export const FormGroup = styled.div`
   margin-top: 4.8rem;
   width: 40rem;
+`;
+
+export const TextareaWrapper = styled.div`
+  margin-top: 4.8rem;
 `;
 
 export const FormInput = styled(Input)`

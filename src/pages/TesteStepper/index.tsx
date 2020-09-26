@@ -22,14 +22,10 @@ import Header from '../../components/Header';
 import './styles.css';
 
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
-import {
-  StepperFooter,
-  StepperForm,
-  Step,
-  FormInput,
-  FormCheckbox,
-  FormGroup,
-} from './styles';
+import { StepperFooter, StepperForm, Step, FormGroup, TextareaWrapper } from './styles';
+import Textarea from '../../components/Textarea';
+import Input from '../../components/Input';
+import Checkbox from '../../components/Checkbox';
 
 type FormValues = {
   identification: string;
@@ -73,10 +69,19 @@ const Form = () => {
     [],
   );
 
+  // const initialResult = useMemo(
+  //   () => ({
+  //     recommendation: '',
+  //     entities: [],
+  //   }),
+  //   [],
+  // );
   const initialResult = useMemo(
     () => ({
-      recommendation: '',
-      entities: [],
+      recommendation: 'MAREA',
+      entities: [
+        { entity: 'DESEMPENHO', sentiment: -0.940702, mention: 'desempenho' },
+      ],
     }),
     [],
   );
@@ -132,7 +137,7 @@ const Form = () => {
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const trackRef = useRef<HTMLUListElement>(null);
@@ -350,13 +355,13 @@ const Form = () => {
               </ParagraphPrimary>
             </div>
             <FormGroup>
-              <FormInput
+              <Input
                 id="identification"
                 label="Identificação"
                 name="identification"
                 onChange={event => handleChange(event)}
                 onBlur={event => handleBlur(event)}
-                disabled={!!values.anonymous}
+                disabled={values.anonymous}
                 errorMessage={errors.identification}
                 value={values.identification}
                 hasError={
@@ -366,7 +371,7 @@ const Form = () => {
                 }
                 touched={touched.identification}
               />
-              <FormCheckbox
+              <Checkbox
                 id="anonymous"
                 label="Quero avaliar anonimamente"
                 name="anonymous"
@@ -552,23 +557,29 @@ const Form = () => {
           </Step>
         )}
         {currentStep === 2 && (
-          <section
-            className={`section--${currentStep === 2 ? 'active' : 'hide'}`}
-          >
-            <label htmlFor="text">Comentário</label>
-            <textarea
-              name="text"
-              id="text"
-              cols={80}
-              rows={5}
-              maxLength={commentMaxLength}
-              value={values.text}
-              onChange={event => handleChange(event)}
-              onBlur={event => handleBlur(event)}
-            />
-            <span>{`${values.text.length}/${commentMaxLength}`}</span>
-            {touched.text && errors.text && <span>{errors.text}</span>}
-          </section>
+          <Step>
+            <div>
+              <HeadingPrimary>Comentário</HeadingPrimary>
+              <ParagraphPrimary>
+                {`Escreva abaixo o que você achou do ${
+                  recommendedCars[values.car]
+                }`}
+              </ParagraphPrimary>
+            </div>
+            <TextareaWrapper>
+              <Textarea
+                name="text"
+                id="text"
+                maxLength={commentMaxLength}
+                value={values.text}
+                errorMessage={errors.text}
+                hasError={touched.text && !!errors.text}
+                hasCounter
+                onChange={event => handleChange(event)}
+                onBlur={event => handleBlur(event)}
+              />
+            </TextareaWrapper>
+          </Step>
         )}
         {currentStep === 3 && (
           <section
@@ -621,7 +632,9 @@ const Form = () => {
         >
           Voltar
         </button>
-        <button type="submit">Avançar</button>
+        <button type="submit" disabled={currentStep === 3}>
+          Avançar
+        </button>
       </StepperFooter>
     </StepperForm>
   );

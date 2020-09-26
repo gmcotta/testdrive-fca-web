@@ -3,7 +3,7 @@ import React from 'react';
 import { Container } from './styles';
 
 type InputProps = React.HTMLProps<HTMLInputElement> & {
-  label: string;
+  label?: string;
   hasError?: boolean;
   errorMessage?: string;
   touched?: boolean;
@@ -23,7 +23,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <Container hasError={hasError}>
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       <input
         type="text"
         name={name}

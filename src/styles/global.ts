@@ -34,6 +34,8 @@ export default createGlobalStyle`
     --color-gray-dark: #8a8d8b;
     --color-green: #a3c299;
     --color-red: #bf3b26;
+    --color-yellow: #E0DD00;
+    --color-orange: #ff9505;
   }
 
   .light {
@@ -47,3 +49,5 @@ export default createGlobalStyle`
     text-align: center;
   }
 `;
+
+// adçksadjfçlacksjfçalfjkdçlaskfjaçfkjaçlkfhjadçklfhadkjlçfhasdlkjhasdlkfjhasdlçfjhaslkfjhasdçkjhaçsdlfjhaçlfhaçfkhçadsfjhasdçjfhaçjfhasçjfhaçjfhçasfjhaçsdjkfhçaaçajdhfçadfjh

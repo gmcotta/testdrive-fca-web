@@ -13,12 +13,11 @@
   position: relative;
   border: 1px solid var(--color-primary);
   border-radius: 4px;
+  background-color: var(--color-white);
 }
 
 .carousel__slider {
   display: flex;
-  /* width: 48rem;
-  height: 32rem; */
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;

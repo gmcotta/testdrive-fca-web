@@ -7,6 +7,8 @@ export const Container = styled.div`
   align-items: center;
   padding: 0 32px;
   height: 5.6rem;
+  background-color: var(--color-white);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 `;
 
 export const LogoWrapper = styled.div`
