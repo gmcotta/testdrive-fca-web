@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-} from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import api from '../../services/api';
 
 import ARGO from '../../assets/carrossel_argo.png';
@@ -19,23 +13,26 @@ import TORO from '../../assets/carrossel_toro.png';
 
 import Button from '../../components/Button';
 import Header from '../../components/Header';
-import './styles.css';
 
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
-import { StepperFooter, StepperForm, Step, FormGroup, TextareaWrapper, PhotoWrapper } from './styles';
+import {
+  StepperFooter,
+  StepperForm,
+  Step,
+  FormGroup,
+  TextareaWrapper,
+  PhotoWrapper,
+} from './styles';
 import Textarea from '../../components/Textarea';
 import Input from '../../components/Input';
 import Checkbox from '../../components/Checkbox';
+import Carousel from '../../components/Carousel';
 
 type FormValues = {
   identification: string;
   anonymous: boolean;
   car: string;
   text: string;
-};
-
-type RecommendationType = {
-  [key: string]: string;
 };
 
 const Form = () => {
@@ -77,48 +74,54 @@ const Form = () => {
     [],
   );
 
-  const carPhotos: RecommendationType = useMemo(
-    () => ({
-      ARGO,
-      CRONOS,
-      DUCATO,
-      FIAT500,
-      FIORINO,
-      LINEA,
-      MAREA,
-      RENEGADE,
-      TORO,
-    }),
-    [],
-  );
-
-  const carouselCaptions = useMemo(
+  const recommendedCars = useMemo(
     () => [
-      'Fiat Argo',
-      'Fiat Cronos',
-      'Fiat Ducato',
-      'Fiat 500',
-      'Fiat Fiorino',
-      'Fiat Linea',
-      'Fiat Marea',
-      'Jeep Renegade',
-      'Fiat Toro',
+      {
+        name: 'FIAT500',
+        caption: 'Fiat 500',
+        photo: FIAT500,
+      },
+      {
+        name: 'ARGO',
+        caption: 'Fiat Argo',
+        photo: ARGO,
+      },
+      {
+        name: 'CRONOS',
+        caption: 'Fiat Cronos',
+        photo: CRONOS,
+      },
+      {
+        name: 'DUCATO',
+        caption: 'Fiat Ducato',
+        photo: DUCATO,
+      },
+      {
+        name: 'FIORINO',
+        caption: 'Fiat Fiorino',
+        photo: FIORINO,
+      },
+      {
+        name: 'LINEA',
+        caption: 'Fiat Linea',
+        photo: LINEA,
+      },
+      {
+        name: 'MAREA',
+        caption: 'Fiat Marea',
+        photo: MAREA,
+      },
+      {
+        name: 'TORO',
+        caption: 'Fiat Toro',
+        photo: TORO,
+      },
+      {
+        name: 'RENEGADE',
+        caption: 'Jeep Renegade',
+        photo: RENEGADE,
+      },
     ],
-    [],
-  );
-
-  const recommendedCars: RecommendationType = useMemo(
-    () => ({
-      ARGO: 'Fiat Argo',
-      CRONOS: 'Fiat Cronos',
-      DUCATO: 'Fiat Ducato',
-      FIAT500: 'Fiat 500',
-      FIORINO: 'Fiat Fiorino',
-      LINEA: 'Fiat Linea',
-      MAREA: 'Fiat Marea',
-      RENEGADE: 'Jeep Renegade',
-      TORO: 'Fiat Toro',
-    }),
     [],
   );
 
@@ -128,10 +131,7 @@ const Form = () => {
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
-  const [currentStep, setCurrentStep] = useState(3);
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const trackRef = useRef<HTMLUListElement>(null);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const defineErrorMessage = useCallback((key, message) => {
     setErrors(oldErrors => ({
@@ -167,40 +167,16 @@ const Form = () => {
     [setTouched],
   );
 
+  const selectStep = useCallback(stepNumber => {
+    setCurrentStep(stepNumber);
+  }, []);
+
   const prevStep = useCallback(() => {
     setCurrentStep(oldStep => oldStep - 1);
   }, []);
 
   const nextStep = useCallback(() => {
     setCurrentStep(oldStep => oldStep + 1);
-  }, []);
-
-  const selectStep = useCallback(stepNumber => {
-    setCurrentStep(stepNumber);
-  }, []);
-
-  const previousSlide = useCallback(() => {
-    setCurrentSlide(oldSlide => oldSlide - 1);
-  }, []);
-
-  const nextSlide = useCallback(() => {
-    setCurrentSlide(oldSlide => oldSlide + 1);
-  }, []);
-
-  const selectSlide = useCallback(slideNumber => {
-    setCurrentSlide(slideNumber);
-  }, []);
-
-  const selectSlideUsingTouch = useCallback(() => {
-    setTimeout(() => {
-      if (trackRef.current !== null) {
-        trackRef.current.click();
-        const slideNumber = Math.round(
-          trackRef.current.scrollLeft / trackRef.current.offsetWidth,
-        );
-        setCurrentSlide(slideNumber);
-      }
-    }, 300);
   }, []);
 
   const handleSubmit = useCallback(
@@ -221,6 +197,7 @@ const Form = () => {
 
             if (values.anonymous) {
               nextStep();
+              break;
             }
 
             if (values.identification === dbIdentification) {
@@ -229,6 +206,7 @@ const Form = () => {
                 car: dbCar,
               }));
               selectStep(2);
+              break;
             } else {
               defineErrorMessage('identification', 'Usuário não encontrado...');
             }
@@ -272,15 +250,19 @@ const Form = () => {
       }
     },
     [
-      currentStep,
-      nextStep,
       errors,
-      setTouched,
       values,
+      currentStep,
       defineErrorMessage,
+      setTouched,
       selectStep,
+      nextStep,
     ],
   );
+
+  const setCarouselValue = useCallback((car: string) => {
+    setValues(oldValues => ({ ...oldValues, car }));
+  }, []);
 
   // Set error messages
   useEffect(() => {
@@ -308,28 +290,6 @@ const Form = () => {
       defineErrorMessage('text', '');
     }
   }, [values, defineErrorMessage]);
-
-  // Carousel mechanics
-  useEffect(() => {
-    if (trackRef.current !== null) {
-      const slideWidth = trackRef.current.offsetWidth;
-      return trackRef.current.scrollTo(currentSlide * slideWidth, 0);
-    }
-    return undefined;
-  }, [currentSlide, trackRef]);
-
-  // Set current car on form
-  useEffect(() => {
-    const currentCarOnCarousel = carouselCaptions[currentSlide];
-    const carList = Object.keys(recommendedCars);
-    const car = carList.find(
-      key => recommendedCars[key] === currentCarOnCarousel,
-    );
-
-    if (car !== undefined) {
-      setValues(oldValues => ({ ...oldValues, car }));
-    }
-  }, [setValues, carouselCaptions, currentSlide, recommendedCars]);
 
   return (
     <StepperForm onSubmit={event => handleSubmit(event)}>
@@ -386,164 +346,13 @@ const Form = () => {
                 margin: '4.8rem auto 0',
               }}
             >
-              <div className="carousel__container">
-                <div className="carousel__wrapper">
-                  <button
-                    className="carousel__slide-button left"
-                    type="button"
-                    onClick={() => previousSlide()}
-                    disabled={currentSlide === 0}
-                  >
-                    &#10094;
-                  </button>
-                  <button
-                    className="carousel__slide-button right"
-                    type="button"
-                    onClick={() => nextSlide()}
-                    disabled={currentSlide === 8}
-                  >
-                    &#10095;
-                  </button>
-                  <ul
-                    className="carousel__slider"
-                    ref={trackRef}
-                    onTouchEnd={() => selectSlideUsingTouch()}
-                  >
-                    <li className="carousel__item">
-                      <img className="carousel__image" src={ARGO} alt="argo" />
-                    </li>
-                    <li className="carousel__item">
-                      <img
-                        className="carousel__image"
-                        src={CRONOS}
-                        alt="cronos"
-                      />
-                    </li>
-                    <li className="carousel__item">
-                      <img
-                        className="carousel__image"
-                        src={DUCATO}
-                        alt="ducato"
-                      />
-                    </li>
-                    <li className="carousel__item">
-                      <img
-                        className="carousel__image"
-                        src={FIAT500}
-                        alt="fiat500"
-                      />
-                    </li>
-                    <li className="carousel__item">
-                      <img
-                        className="carousel__image"
-                        src={FIORINO}
-                        alt="fiorino"
-                      />
-                    </li>
-                    <li className="carousel__item">
-                      <img
-                        className="carousel__image"
-                        src={LINEA}
-                        alt="linea"
-                      />
-                    </li>
-                    <li className="carousel__item">
-                      <img
-                        className="carousel__image"
-                        src={MAREA}
-                        alt="marea"
-                      />
-                    </li>
-                    <li className="carousel__item">
-                      <img
-                        className="carousel__image"
-                        src={RENEGADE}
-                        alt="renegade"
-                      />
-                    </li>
-                    <li className="carousel__item">
-                      <img className="carousel__image" src={TORO} alt="toro" />
-                    </li>
-                  </ul>
-                  <div className="carousel__nav">
-                    <button
-                      type="button"
-                      aria-label="slide-0"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 0 && 'active'
-                      }`}
-                      onClick={() => selectSlide(0)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-1"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 1 && 'active'
-                      }`}
-                      onClick={() => selectSlide(1)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-2"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 2 && 'active'
-                      }`}
-                      onClick={() => selectSlide(2)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-3"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 3 && 'active'
-                      }`}
-                      onClick={() => selectSlide(3)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-4"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 4 && 'active'
-                      }`}
-                      onClick={() => selectSlide(4)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-5"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 5 && 'active'
-                      }`}
-                      onClick={() => selectSlide(5)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-6"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 6 && 'active'
-                      }`}
-                      onClick={() => selectSlide(6)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-7"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 7 && 'active'
-                      }`}
-                      onClick={() => selectSlide(7)}
-                    />
-                    <button
-                      type="button"
-                      aria-label="slide-8"
-                      className={`carousel__nav-indicator ${
-                        currentSlide === 8 && 'active'
-                      }`}
-                      onClick={() => selectSlide(8)}
-                    />
-                  </div>
-                </div>
-                <HeadingPrimary>
-                  {carouselCaptions[currentSlide]}
-                </HeadingPrimary>
-              </div>
+              <Carousel
+                photos={recommendedCars.map(car => car.photo)}
+                captions={recommendedCars.map(car => car.caption)}
+                hasNav
+                optionValues={recommendedCars.map(car => car.name)}
+                setFormValue={setCarouselValue}
+              />
             </div>
           </Step>
         )}
@@ -553,7 +362,7 @@ const Form = () => {
               <HeadingPrimary>Comentário</HeadingPrimary>
               <ParagraphPrimary>
                 {`Escreva abaixo o que você achou do ${
-                  recommendedCars[values.car]
+                  recommendedCars.find(car => car.name === values.car)?.caption
                 }`}
               </ParagraphPrimary>
             </div>
@@ -577,59 +386,80 @@ const Form = () => {
             <div>
               <HeadingPrimary>Obrigado</HeadingPrimary>
 
-                {apiResults.recommendation && (
-                  <>
-                    <ParagraphPrimary>
-                      Que pena que você não gostou do carro &#58;&#8317;
-                    </ParagraphPrimary>
-                    <ParagraphPrimary>
-                      {`Caso queira realizar um novo test drive conosco,
-                    sugerimos o ${recommendedCars[apiResults.recommendation]}.`}
-                    </ParagraphPrimary>
-                  </>
-                )}
+              {apiResults.recommendation && (
+                <>
+                  <ParagraphPrimary>
+                    Que pena que você não gostou do carro :(
+                  </ParagraphPrimary>
+                  <ParagraphPrimary>
+                    {`Caso queira realizar um novo test drive conosco,
+                    sugerimos o ${
+                      recommendedCars.find(
+                        car => car.name === apiResults.recommendation,
+                      )?.caption
+                    }`}
+                  </ParagraphPrimary>
+                </>
+              )}
 
-                {!apiResults.recommendation && apiResults.entities.length && (
-                  <>
-                    <ParagraphPrimary>
-                      Maravilha! Ficamos felizes que tenha gostado!
-                    </ParagraphPrimary>
-                    <ParagraphPrimary>
-                      Caso tenha se identificado, entraremos em contato.
-                    </ParagraphPrimary>
-                  </>
-                )}
+              {!apiResults.recommendation && !!apiResults.entities.length && (
+                <>
+                  <ParagraphPrimary>
+                    Maravilha! Ficamos felizes que tenha gostado!
+                  </ParagraphPrimary>
+                  <ParagraphPrimary>
+                    Caso tenha se identificado, entraremos em contato.
+                  </ParagraphPrimary>
+                </>
+              )}
 
-                {!apiResults.recommendation && !apiResults.entities.length && (
-                  <>
-                    <ParagraphPrimary>
-                      Não conseguimos processar seu comentário...
-                    </ParagraphPrimary>
-                    <ParagraphPrimary>
-                      Por favor, tente novamente mais tarde.
-                    </ParagraphPrimary>
-                  </>
-                )}
+              {!apiResults.recommendation && !apiResults.entities.length && (
+                <>
+                  <ParagraphPrimary>
+                    Não conseguimos processar seu comentário...
+                  </ParagraphPrimary>
+                  <ParagraphPrimary>
+                    Por favor, tente novamente mais tarde.
+                  </ParagraphPrimary>
+                </>
+              )}
             </div>
 
             {apiResults.recommendation && (
               <PhotoWrapper>
                 <img
-                  src={carPhotos[apiResults.recommendation]}
-                  alt={recommendedCars[apiResults.recommendation]}
+                  src={
+                    recommendedCars.find(
+                      car => car.name === apiResults.recommendation,
+                    )?.photo
+                  }
+                  alt=""
                 />
-                <HeadingPrimary>{recommendedCars[apiResults.recommendation]}</HeadingPrimary>
+                <HeadingPrimary>
+                  {
+                    recommendedCars.find(
+                      car => car.name === apiResults.recommendation,
+                    )?.caption
+                  }
+                </HeadingPrimary>
 
                 <Button to="/review">Agendar test drive</Button>
               </PhotoWrapper>
             )}
-            {!apiResults.recommendation && apiResults.entities.length && (
+            {!apiResults.recommendation && !!apiResults.entities.length && (
               <PhotoWrapper>
                 <img
-                  src={carPhotos[values.car]}
-                  alt={recommendedCars[values.car]}
+                  src={
+                    recommendedCars.find(car => car.name === values.car)?.photo
+                  }
+                  alt=""
                 />
-                <HeadingPrimary>{recommendedCars[values.car]}</HeadingPrimary>
+                <HeadingPrimary>
+                  {
+                    recommendedCars.find(car => car.name === values.car)
+                      ?.caption
+                  }
+                </HeadingPrimary>
               </PhotoWrapper>
             )}
           </Step>
