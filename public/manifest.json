@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Test Drive FCA",
+  "name": "Aplicação para agendar ou avaliar um test drive dos carros da FCA",
   "icons": [
     {
       "src": "favicon.ico",

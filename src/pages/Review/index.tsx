@@ -253,15 +253,7 @@ const Form = () => {
           } else {
             setIsLoading(true);
             api
-              .post(
-                '/api/v1/recommend',
-                { car: values.car, text: values.text },
-                {
-                  headers: {
-                    'Access-Control-Allow-Origin': '*',
-                  },
-                },
-              )
+              .post('/api/v1/recommend', { car: values.car, text: values.text })
               .then(response => {
                 const recommendationWithoutSpace = response.data.recommendation.replace(
                   ' ',
@@ -272,6 +264,7 @@ const Form = () => {
                   entities: response.data.entities,
                 });
                 setIsLoading(false);
+                nextStep();
               });
           }
           break;
