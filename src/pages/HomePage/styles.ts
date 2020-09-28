@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 import Button from '../../components/Button';
 
+import homeImage from '../../assets/home-page.png';
+
 export const Container = styled.div`
   height: 100%;
   display: flex;
@@ -13,38 +15,40 @@ export const LeftSection = styled.main`
   flex-direction: column;
   justify-content: space-between;
   height: 80vh;
-  max-width: min(40rem, 30%);
-  padding-left: 3.2rem;
+  max-width: min(40rem, 30vw);
+  padding: 0 1.6rem;
 `;
 
 export const RightSection = styled.aside`
-  background-color: var(--color-primary);
-  width: 70%;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+  background: url(${homeImage}) no-repeat;
+  background-position: right 35% top;
+  background-size: cover;
+  width: 70vw;
   display: flex;
-  position: relative;
-`;
-
-export const Shape = styled.div`
-  float: left;
-  width: 2000px;
-  shape-outside: polygon(0 0, 100% 100%, 0 100%);
 `;
 
 export const Content = styled.div`
-  width: 100%;
-  position: absolute;
-  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6.4rem;
+  text-align: center;
+
+  & p {
+    margin-top: 1.6rem;
+  }
 `;
 
 export const ButtonWrapper = styled.div`
-  > a:first-child {
+  & a:first-child {
     margin-bottom: 1.6rem;
   }
 `;
 
 export const HomeButton = styled(Button)`
-  height: 56px;
+  height: 5.6rem;
 `;
 
 export const Title = styled.h1`
@@ -52,12 +56,4 @@ export const Title = styled.h1`
   color: var(--color-gray-dark);
   font-size: 10rem;
   text-align: center;
-`;
-
-export const ImageWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > img {
-    width: 50%;
-  }
 `;

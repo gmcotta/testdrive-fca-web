@@ -16,7 +16,7 @@ export const Container = styled.div<InputProps>`
   }
 
   > input {
-    background-color: var(--color-light);
+    background-color: var(--color-white);
     height: 3.2rem;
     border: 1px solid
       ${props => (props.hasError ? 'var(--color-red)' : 'var(--color-primary)')};

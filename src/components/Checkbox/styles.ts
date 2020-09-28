@@ -12,6 +12,10 @@ export const Wrapper = styled.div`
   > input {
     display: none;
 
+    ~ label div {
+      background-color: var(--color-white);
+    }
+
     &:checked ~ label div {
       background-color: var(--color-primary);
 

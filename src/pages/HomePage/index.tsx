@@ -1,8 +1,6 @@
 import React from 'react';
 
 import logo from '../../assets/logo.svg';
-import argo from '../../assets/argo1.png';
-import renegade from '../../assets/renegade1.png';
 
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
 
@@ -13,7 +11,6 @@ import {
   ButtonWrapper,
   HomeButton,
   Title,
-  ImageWrapper,
   Content,
 } from './styles';
 
@@ -24,7 +21,7 @@ const HomePage: React.FC = () => {
         <img src={logo} alt="FCA logo" />
         <Title>TEST DRIVE</Title>
         <ButtonWrapper>
-          <HomeButton to="/">Agende um test drive</HomeButton>
+          <HomeButton to="/appointment">Agende um test drive</HomeButton>
           <HomeButton to="/review">Avalie seu test drive</HomeButton>
         </ButtonWrapper>
       </LeftSection>
@@ -33,10 +30,6 @@ const HomePage: React.FC = () => {
           <HeadingPrimary className="light">
             Faça um test drive conosco
           </HeadingPrimary>
-          <ImageWrapper>
-            <img src={argo} alt="Fiat Argo" />
-            <img src={renegade} alt="Jeep Renegade" />
-          </ImageWrapper>
           <ParagraphPrimary className="light">
             A explicação técnica de um modelo é fundamental, mas jamais
             substituirá a experiência de dirigir um automóvel do grupo FCA. Por

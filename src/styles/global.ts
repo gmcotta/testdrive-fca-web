@@ -16,6 +16,7 @@ export default createGlobalStyle`
     max-width: 100vw;
     height: 100%;
     width: 100%;
+    background-color: var(--color-primary-lightest);
   }
 
   *, button, input {
@@ -29,6 +30,7 @@ export default createGlobalStyle`
     --color-black: #000;
     --color-dark: #2b2d42;
     --color-primary: #6186c4;
+    --color-primary-lightest: #F0F4F9;
     --color-gray-light: #eee;
     --color-gray: #ddd;
     --color-gray-dark: #8a8d8b;

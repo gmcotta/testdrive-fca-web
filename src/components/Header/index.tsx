@@ -11,7 +11,7 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ description }) => {
   return (
     <Container>
-      <LogoWrapper>
+      <LogoWrapper to="/">
         <img src={logoRedux} alt="FCA Logo" />
         <h1>Test Drive</h1>
       </LogoWrapper>

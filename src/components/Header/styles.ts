@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { HeadingPrimary } from '../Typography';
 
@@ -11,9 +12,10 @@ export const Container = styled.div`
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 `;
 
-export const LogoWrapper = styled.div`
+export const LogoWrapper = styled(Link)`
   display: flex;
   align-items: center;
+  text-decoration: none;
 
   > h1 {
     color: var(--color-gray-dark);

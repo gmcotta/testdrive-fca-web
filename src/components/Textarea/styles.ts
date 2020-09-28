@@ -27,7 +27,7 @@ export const Container = styled.div<TextareaProps>`
   > textarea {
     resize: none;
     height: 8.8rem;
-    background-color: var(--color-light);
+    background-color: var(--color-white);
     border: 1px solid
       ${props => (props.hasError ? 'var(--color-red)' : 'var(--color-primary)')};
     border-radius: 4px;
