@@ -15,6 +15,7 @@ const Textarea: React.FC<TextareaProps> = ({
   label,
   name,
   value,
+  minLength,
   maxLength,
   hasError,
   hasCounter,
@@ -23,10 +24,17 @@ const Textarea: React.FC<TextareaProps> = ({
   onChange,
   onBlur,
 }) => {
-  const [status, setStatus] = useState('ok');
+  const [status, setStatus] = useState('min');
 
   useEffect(() => {
-    setStatus('ok');
+    setStatus('min');
+    if (
+      maxLength !== undefined &&
+      minLength !== undefined &&
+      value.length > minLength
+    ) {
+      setStatus('ok');
+    }
     if (
       maxLength !== undefined &&
       value.length >= Math.floor(0.75 * maxLength)
@@ -40,9 +48,9 @@ const Textarea: React.FC<TextareaProps> = ({
       setStatus('danger');
     }
     if (maxLength !== undefined && value.length === maxLength) {
-      setStatus('full');
+      setStatus('max');
     }
-  }, [value, maxLength]);
+  }, [value, maxLength, minLength]);
 
   return (
     <Container hasError={hasError}>
@@ -51,6 +59,7 @@ const Textarea: React.FC<TextareaProps> = ({
         name={name}
         id={id}
         value={value}
+        minLength={minLength}
         maxLength={maxLength}
         onChange={onChange}
         onBlur={onBlur}

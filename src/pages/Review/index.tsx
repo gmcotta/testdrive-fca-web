@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import Lottie from 'react-lottie';
+
 import api from '../../services/api';
 
 import ARGO from '../../assets/carrossel_argo.png';
@@ -11,10 +13,16 @@ import MAREA from '../../assets/carrossel_marea.png';
 import RENEGADE from '../../assets/carrossel_renegade.png';
 import TORO from '../../assets/carrossel_toro.png';
 
+import animationData from '../../assets/animations/loading-1.json';
+
 import Button from '../../components/Button';
 import Header from '../../components/Header';
-
 import { HeadingPrimary, ParagraphPrimary } from '../../components/Typography';
+import Textarea from '../../components/Textarea';
+import Input from '../../components/Input';
+import Checkbox from '../../components/Checkbox';
+import Carousel from '../../components/Carousel';
+
 import {
   StepperFooter,
   StepperForm,
@@ -23,10 +31,6 @@ import {
   TextareaWrapper,
   PhotoWrapper,
 } from './styles';
-import Textarea from '../../components/Textarea';
-import Input from '../../components/Input';
-import Checkbox from '../../components/Checkbox';
-import Carousel from '../../components/Carousel';
 
 type FormValues = {
   identification: string;
@@ -125,6 +129,19 @@ const Form = () => {
     [],
   );
 
+  const lottieOptions = useMemo(
+    () => ({
+      loop: true,
+      autoplay: true,
+      animationData,
+      rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+      },
+    }),
+    [],
+  );
+
+  const commentMinLength = useMemo(() => 14, []);
   const commentMaxLength = useMemo(() => 200, []);
 
   const [values, setValues] = useState<FormValues>(initialValues);
@@ -132,6 +149,7 @@ const Form = () => {
   const [touched, setTouched] = useState(initialTouched);
   const [apiResults, setApiResults] = useState(initialResult);
   const [currentStep, setCurrentStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const defineErrorMessage = useCallback((key, message) => {
     setErrors(oldErrors => ({
@@ -233,8 +251,17 @@ const Form = () => {
               text: true,
             }));
           } else {
+            setIsLoading(true);
             api
-              .post('/api/v1/recommend', { car: values.car, text: values.text })
+              .post(
+                '/api/v1/recommend',
+                { car: values.car, text: values.text },
+                {
+                  headers: {
+                    'Access-Control-Allow-Origin': '*',
+                  },
+                },
+              )
               .then(response => {
                 const recommendationWithoutSpace = response.data.recommendation.replace(
                   ' ',
@@ -244,7 +271,12 @@ const Form = () => {
                   recommendation: recommendationWithoutSpace,
                   entities: response.data.entities,
                 });
-
+                setIsLoading(false);
+              })
+              .catch(error => {
+                console.log(error);
+              })
+              .finally(() => {
                 nextStep();
               });
           }
@@ -287,10 +319,13 @@ const Form = () => {
       defineErrorMessage('car', '');
     }
 
-    if (!values.text) {
-      defineErrorMessage('text', 'Necessário fazer um comentário.');
+    if (values.text.length <= commentMinLength) {
+      defineErrorMessage(
+        'text',
+        `Comentário com mínimo de ${commentMinLength} caracteres.`,
+      );
     }
-    if (values.text) {
+    if (values.text.length > commentMinLength) {
       defineErrorMessage('text', '');
     }
   }, [values, defineErrorMessage]);
@@ -378,13 +413,14 @@ const Form = () => {
               <ParagraphPrimary>
                 {`Escreva abaixo o que você achou do ${
                   recommendedCars.find(car => car.name === values.car)?.caption
-                }`}
+                }.`}
               </ParagraphPrimary>
             </div>
             <TextareaWrapper>
               <Textarea
                 name="text"
                 id="text"
+                minLength={commentMinLength}
                 maxLength={commentMaxLength}
                 value={values.text}
                 errorMessage={errors.text}
@@ -412,7 +448,7 @@ const Form = () => {
                       recommendedCars.find(
                         car => car.name === apiResults.recommendation,
                       )?.caption
-                    }`}
+                    }.`}
                   </ParagraphPrimary>
                 </>
               )}
@@ -478,6 +514,29 @@ const Form = () => {
               </PhotoWrapper>
             )}
           </Step>
+        )}
+        {isLoading && (
+          <div
+            style={{
+              zIndex: 10,
+              position: 'absolute',
+              top: '0',
+              left: '0',
+              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+              width: '100vw',
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Lottie
+              options={lottieOptions}
+              height={400}
+              width={400}
+              isClickToPauseDisabled
+            />
+          </div>
         )}
       </>
 

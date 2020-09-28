@@ -64,10 +64,10 @@ export const PhotoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 4.8rem;
+  margin: 1.6rem 0;
 
   > img {
-    width: min(50vw, 56rem);
+    width: min(40vw, 40rem);
   }
 
   > a {

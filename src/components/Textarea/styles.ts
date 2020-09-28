@@ -50,10 +50,11 @@ export const Container = styled.div<TextareaProps>`
 `;
 
 const statusColors: StatusProps = {
+  min: 'var(--color-red)',
   ok: 'var(--color-dark)',
   caution: 'var(--color-yellow)',
   danger: 'var(--color-orange)',
-  full: 'var(--color-red)',
+  max: 'var(--color-red)',
 };
 
 export const CharCounter = styled.div<CounterProps>`
