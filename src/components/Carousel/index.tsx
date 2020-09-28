@@ -45,7 +45,6 @@ const Carousel: React.FC<CarouselProps> = ({
   const selectSlideUsingTouch = useCallback(() => {
     setTimeout(() => {
       if (trackRef.current !== null) {
-        console.log('teste3');
         trackRef.current.click();
         const slideNumber = Math.round(
           trackRef.current.scrollLeft / trackRef.current.offsetWidth,
@@ -58,16 +57,13 @@ const Carousel: React.FC<CarouselProps> = ({
   useEffect(() => {
     if (trackRef.current !== null) {
       const slideWidth = trackRef.current.offsetWidth;
-      console.log('teste1');
       return trackRef.current.scrollTo(currentSlide * slideWidth, 0);
     }
-    console.log('teste2');
     return undefined;
   }, [currentSlide, trackRef]);
 
   useEffect(() => {
     if (optionValues !== undefined && setFormValue !== undefined) {
-      console.log('teste4');
       setFormValue(optionValues[currentSlide]);
     }
   }, [currentSlide, setFormValue]);

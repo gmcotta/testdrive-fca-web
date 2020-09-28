@@ -272,12 +272,6 @@ const Form = () => {
                   entities: response.data.entities,
                 });
                 setIsLoading(false);
-              })
-              .catch(error => {
-                console.log(error);
-              })
-              .finally(() => {
-                nextStep();
               });
           }
           break;
@@ -328,7 +322,7 @@ const Form = () => {
     if (values.text.length > commentMinLength) {
       defineErrorMessage('text', '');
     }
-  }, [values, defineErrorMessage]);
+  }, [values, commentMinLength, defineErrorMessage]);
 
   return (
     <StepperForm autoComplete="off" onSubmit={event => handleSubmit(event)}>
