@@ -1,16 +1,21 @@
 import styled from 'styled-components';
 
+type CheckboxProps = {
+  hasError?: boolean;
+};
+
 export const Container = styled.div`
   display: inline-block;
   margin: 0.8rem 0;
 `;
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<CheckboxProps>`
   display: flex;
   flex-direction: column;
 
   > input {
-    display: none;
+    z-index: -1000;
+    position: absolute;
 
     ~ label div {
       background-color: var(--color-white);
@@ -40,6 +45,8 @@ export const Wrapper = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
+    color: ${props =>
+      props.hasError ? 'var(--color-red)' : 'var(--color-dark)'};
   }
 
   > span {
@@ -50,13 +57,14 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const Box = styled.div`
+export const Box = styled.div<CheckboxProps>`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 1.6rem;
   height: 1.6rem;
-  border: 1px solid var(--color-primary);
+  border: 1px solid
+    ${props => (props.hasError ? 'var(--color-red)' : 'var(--color-primary)')};
   border-radius: 4px;
 
   & span {

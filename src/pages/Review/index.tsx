@@ -296,7 +296,7 @@ const Form = () => {
   }, [values, defineErrorMessage]);
 
   return (
-    <StepperForm onSubmit={event => handleSubmit(event)}>
+    <StepperForm autoComplete="off" onSubmit={event => handleSubmit(event)}>
       <>
         {currentStep === 0 && (
           <Step>
@@ -319,12 +319,15 @@ const Form = () => {
                 disabled={values.anonymous}
                 errorMessage={errors.identification}
                 value={values.identification}
+                autoComplete="off"
                 hasError={
-                  touched.identification &&
-                  !!errors.identification &&
-                  !values.anonymous
+                  (touched.identification &&
+                    !!errors.identification &&
+                    !values.anonymous) ||
+                  (touched.anonymous &&
+                    !!errors.identification &&
+                    !values.anonymous)
                 }
-                touched={touched.identification}
               />
               <Checkbox
                 id="anonymous"
@@ -334,6 +337,14 @@ const Form = () => {
                 onChange={event => handleChange(event)}
                 onBlur={event => handleBlur(event)}
                 disabled={!!values.identification}
+                hasError={
+                  (touched.identification &&
+                    !!errors.identification &&
+                    !values.anonymous) ||
+                  (touched.anonymous &&
+                    !!errors.identification &&
+                    !values.anonymous)
+                }
               />
             </FormGroup>
           </Step>
@@ -346,7 +357,7 @@ const Form = () => {
             </div>
             <div
               style={{
-                width: 'min(60vw, 60rem)',
+                width: 'min(50vw, 50rem)',
                 margin: '4.8rem auto 0',
               }}
             >

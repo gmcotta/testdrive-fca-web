@@ -17,7 +17,7 @@ export const LogoWrapper = styled(Link)`
   align-items: center;
   text-decoration: none;
 
-  > h1 {
+  & h1 {
     color: var(--color-gray-dark);
     font-weight: 100;
     font-size: 2.8rem;

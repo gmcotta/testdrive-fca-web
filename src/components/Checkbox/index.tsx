@@ -5,6 +5,7 @@ import { Container, Wrapper, Box, Label } from './styles';
 
 type CheckboxProps = React.HTMLProps<HTMLInputElement> & {
   label: string;
+  touched?: boolean;
   hasError?: boolean;
   errorMessage?: string;
 };
@@ -22,7 +23,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
 }) => {
   return (
     <Container>
-      <Wrapper>
+      <Wrapper hasError={hasError}>
         <input
           type="checkbox"
           name={name}
@@ -33,7 +34,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           disabled={disabled}
         />
         <label htmlFor={id}>
-          <Box>
+          <Box hasError={hasError}>
             <span>
               <MdCheck size={12} />
             </span>
