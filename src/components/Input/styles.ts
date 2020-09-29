@@ -8,14 +8,20 @@ export const Container = styled.div<InputProps>`
   display: flex;
   flex-direction: column;
 
-  > label {
+  & label {
     color: ${props =>
       props.hasError ? 'var(--color-red)' : 'var(--color-dark)'};
     font-size: 2rem;
     font-weight: 500;
+
+    & span {
+      color: inherit;
+      font-size: 1.2rem;
+      font-weight: inherit;
+    }
   }
 
-  > input {
+  & input {
     background-color: var(--color-white);
     height: 3.2rem;
     border: 1px solid
@@ -31,7 +37,7 @@ export const Container = styled.div<InputProps>`
     }
   }
 
-  > span {
+  & span {
     font-size: 1.2rem;
     color: var(--color-red);
     font-weight: 500;

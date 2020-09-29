@@ -543,7 +543,7 @@ const Form = () => {
   );
 };
 
-const TesteStepper: React.FC = () => {
+const Review: React.FC = () => {
   return (
     <div style={{ height: '100%' }}>
       <Header description="Avaliação" />
@@ -552,4 +552,4 @@ const TesteStepper: React.FC = () => {
   );
 };
 
-export default TesteStepper;
+export default Review;

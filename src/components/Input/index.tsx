@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Container } from './styles';
 
@@ -7,6 +7,8 @@ type InputProps = React.HTMLProps<HTMLInputElement> & {
   hasError?: boolean;
   errorMessage?: string;
   touched?: boolean;
+  mask?: string;
+  optional?: boolean;
 };
 
 const Input: React.FC<InputProps> = ({
@@ -18,13 +20,22 @@ const Input: React.FC<InputProps> = ({
   hasError,
   errorMessage,
   disabled,
+  optional,
   onChange,
   onBlur,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
     <Container hasError={hasError}>
-      {label && <label htmlFor={id}>{label}</label>}
+      {label && (
+        <label htmlFor={id}>
+          {label}
+          {optional && <span> (Opcional)</span>}
+        </label>
+      )}
       <input
+        ref={inputRef}
         type="text"
         name={name}
         id={id}
