@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import Lottie from 'react-lottie';
+import Modal from 'react-modal';
 
 import ARGO from '../../assets/carrossel_argo.png';
 import CRONOS from '../../assets/carrossel_cronos.png';
@@ -20,8 +21,11 @@ import Textarea from '../../components/Textarea';
 import Input from '../../components/Input';
 import Checkbox from '../../components/Checkbox';
 import Carousel from '../../components/Carousel';
+import Accordion from '../../components/Accordion';
 
 import { StepperForm, Step, StepperFooter, FormGroup } from './styles';
+
+Modal.setAppElement('#root');
 
 type FormValues = {
   firstName: string;
@@ -34,6 +38,16 @@ type FormValues = {
   neighborhood: string;
   city: string;
   uf: string;
+  car: string;
+};
+
+type A = {
+  title: string;
+  content: [string, string][];
+};
+
+type CarDetailsValue = {
+  [key: string]: Array<A>;
 };
 
 const Form = () => {
@@ -49,6 +63,7 @@ const Form = () => {
       neighborhood: '',
       city: '',
       uf: '',
+      car: '',
     }),
     [],
   );
@@ -134,6 +149,64 @@ const Form = () => {
     [],
   );
 
+  const carDetails = useMemo<CarDetailsValue>(
+    () => ({
+      FIAT500: [
+        {
+          title: 'Desempenho',
+          content: [
+            ['Cilindros', '4'],
+            ['Potência', '109 CV'],
+            ['Torque', '14,2 kgf.m'],
+            ['Velocidade máxima', '184 km/h'],
+            ['Transmissão', 'Manual'],
+            ['Número de marchas', '5'],
+            ['Tração', 'Dianteira'],
+          ],
+        },
+        {
+          title: 'Consumo',
+          content: [
+            ['Cilindros', '4'],
+            ['Potência', '109 CV'],
+            ['Torque', '14,2 kgf.m'],
+            ['Velocidade máxima', '184 km/h'],
+            ['Transmissão', 'Manual'],
+            ['Número de marchas', '5'],
+            ['Tração', 'Dianteira'],
+          ],
+        },
+      ],
+      ARGO: [
+        {
+          title: 'Desempenho',
+          content: [
+            ['Cilindros', '4'],
+            ['Potência', '109 CV'],
+            ['Torque', '14,2 kgf.m'],
+            ['Velocidade máxima', '184 km/h'],
+            ['Transmissão', 'Manual'],
+            ['Número de marchas', '5'],
+            ['Tração', 'Dianteira'],
+          ],
+        },
+        {
+          title: 'Consumo',
+          content: [
+            ['Cilindros', '4'],
+            ['Potência', '109 CV'],
+            ['Torque', '14,2 kgf.m'],
+            ['Velocidade máxima', '184 km/h'],
+            ['Transmissão', 'Manual'],
+            ['Número de marchas', '5'],
+            ['Tração', 'Dianteira'],
+          ],
+        },
+      ],
+    }),
+    [],
+  );
+
   const lottieOptions = useMemo(
     () => ({
       loop: true,
@@ -149,7 +222,8 @@ const Form = () => {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [modalIsOpen, setModalIsOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const defineErrorMessage = useCallback((key, message) => {
@@ -483,8 +557,58 @@ const Form = () => {
           <Step>
             <div>
               <HeadingPrimary>Carro</HeadingPrimary>
-              <ParagraphPrimary>Qual foi o carro testado?</ParagraphPrimary>
+              <ParagraphPrimary>{`Ótimo, ${values.firstName}. Agora, escolha seu carro!`}</ParagraphPrimary>
             </div>
+            <div
+              style={{
+                width: 'min(50vw, 50rem)',
+                margin: '4.8rem auto 0',
+              }}
+            >
+              <Carousel
+                photos={recommendedCars.map(car => car.photo)}
+                captions={recommendedCars.map(car => car.caption)}
+                hasNav
+                optionValues={recommendedCars.map(car => car.name)}
+                setFormValue={setCarouselValue}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setModalIsOpen(true);
+              }}
+            >
+              Ver detalhes
+            </button>
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={() => setModalIsOpen(false)}
+              shouldCloseOnOverlayClick
+              style={{
+                overlay: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  zIndex: 1000,
+                },
+                content: {
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translateX(-50%) translateY(-50%)',
+                  backgroundColor: 'var(--color-white)',
+                  border: '1px solid var(--color-primary)',
+                  display: 'flex',
+                },
+              }}
+            >
+              {/* {carDetails !== undefined && (
+                <Accordion
+                  titles={carDetails[values.car].map(car => car.title)}
+                  contents={carDetails[values.car].map(car => car.content)}
+                />
+              )} */}
+              {JSON.stringify(carDetails[values.car], null, 2)}
+              {JSON.stringify(carDetails[values.car], null, 2)}
+            </Modal>
           </Step>
         )}
         {currentStep === 2 && (

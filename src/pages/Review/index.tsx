@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import Lottie from 'react-lottie';
 
-import api from '../../services/api';
+import { ibmApi } from '../../services/api';
 
 import ARGO from '../../assets/carrossel_argo.png';
 import CRONOS from '../../assets/carrossel_cronos.png';
@@ -252,7 +252,7 @@ const Form = () => {
             }));
           } else {
             setIsLoading(true);
-            api
+            ibmApi
               .post('/api/v1/recommend', { car: values.car, text: values.text })
               .then(response => {
                 const recommendationWithoutSpace = response.data.recommendation.replace(

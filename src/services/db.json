@@ -1,0 +1,40 @@
+{
+  "details": [
+    {
+      "id": 1,
+      "car": "FIAT500",
+      "details": [
+        {
+          "title": "Desempenho",
+          "content": [
+            ["Cilindros", "4"],
+            ["Potência", "109 CV"],
+            ["Torque", "14,2 kgf.m"],
+            ["Velocidade máxima", "184 km/h"],
+            ["Transmissão", "Manual"],
+            ["Número de marchas", "5"],
+            ["Tração", "Dianteira"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "car": "ARGO",
+      "details": [
+        {
+          "title": "Consumo",
+          "content": [
+            ["Cilindros", "4"],
+            ["Potência", "109 CV"],
+            ["Torque", "14,2 kgf.m"],
+            ["Velocidade máxima", "184 km/h"],
+            ["Transmissão", "Manual"],
+            ["Número de marchas", "5"],
+            ["Tração", "Dianteira"]
+          ]
+        }
+      ]
+    }
+  ]
+}

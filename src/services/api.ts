@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const api = axios.create({
+export const ibmApi = axios.create({
   baseURL: 'http://testdrive-fca.mybluemix.net',
 });
 
-export default api;
+export const serverApi = axios.create({
+  baseURL: 'http://localhost:3333',
+});
