@@ -7,8 +7,8 @@ export const StepperForm = styled.form`
   flex-direction: column;
   justify-content: space-between;
   max-width: 88rem;
-  max-height: calc(100% - 5.6rem - 0.8rem);
-  margin: 0.8rem auto 0;
+  height: calc(100vh - 5.6rem);
+  margin: 0 auto;
   padding: 0.8rem;
 `;
 

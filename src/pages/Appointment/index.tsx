@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import Lottie from 'react-lottie';
 import Modal from 'react-modal';
 import { MdClose } from 'react-icons/md';
+import { Map, TileLayer, Marker } from 'react-leaflet';
 
 import ARGO from '../../assets/carrossel_argo.png';
 import CRONOS from '../../assets/carrossel_cronos.png';
@@ -43,6 +44,7 @@ type FormValues = {
   city: string;
   uf: string;
   car: string;
+  dealershipOrHome: string;
 };
 
 const Form = () => {
@@ -59,6 +61,7 @@ const Form = () => {
       city: '',
       uf: '',
       car: '',
+      dealershipOrHome: 'dealership',
     }),
     [],
   );
@@ -168,10 +171,14 @@ const Form = () => {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2);
   const [carDetails, setCarDetails] = useState(initialCarDetails);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    -23.5537361,
+    -46.6538222,
+  ]);
 
   const defineErrorMessage = useCallback((key, message) => {
     setErrors(oldErrors => ({
@@ -266,6 +273,10 @@ const Form = () => {
           }
           break;
         case 1:
+          setValues(oldValues => ({
+            ...oldValues,
+            dealershipOrHome: '',
+          }));
           nextStep();
           break;
         case 2:
@@ -625,11 +636,116 @@ const Form = () => {
         )}
         {currentStep === 2 && (
           <Step>
-            <div>
-              <HeadingPrimary>Comentário</HeadingPrimary>
-              <ParagraphPrimary>
-                Escreva abaixo o que você achou do carro.
-              </ParagraphPrimary>
+            <div style={{ height: '100%' }}>
+              <HeadingPrimary>Local</HeadingPrimary>
+              {values.dealershipOrHome === '' && (
+                <>
+                  <div>
+                    <ParagraphPrimary>Excelente escolha!</ParagraphPrimary>
+                    <ParagraphPrimary>
+                      O próximo passo é escolher o local do test drive.
+                    </ParagraphPrimary>
+                    <ParagraphPrimary>
+                      Pode optar em ir na concessionária, ou receber o carro no
+                      endereço indicado anteriormente.
+                    </ParagraphPrimary>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      margin: '3.2rem 0',
+                    }}
+                  >
+                    <button
+                      style={{
+                        padding: '1.6rem',
+                        margin: '1.6rem 0',
+                        borderRadius: '4px',
+                        border: 'none',
+                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+                        cursor: 'pointer',
+                        fontSize: '2.4rem',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        backgroundColor: 'var(--color-primary)',
+                        color: 'var(--color-light)',
+                        alignSelf: 'center',
+                      }}
+                      type="button"
+                      onClick={() => {
+                        setValues(oldValues => ({
+                          ...oldValues,
+                          dealershipOrHome: 'dealership',
+                        }));
+                      }}
+                    >
+                      Vou na concessionária
+                    </button>
+                    <button
+                      style={{
+                        padding: '1.6rem',
+                        margin: '1.6rem 0',
+                        borderRadius: '4px',
+                        border: 'none',
+                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+                        cursor: 'pointer',
+                        fontSize: '2.4rem',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        backgroundColor: 'var(--color-primary)',
+                        color: 'var(--color-light)',
+                        alignSelf: 'center',
+                      }}
+                      type="button"
+                      onClick={() => {
+                        setValues(oldValues => ({
+                          ...oldValues,
+                          dealershipOrHome: 'home',
+                        }));
+                      }}
+                    >
+                      Quero receber o vendedor
+                    </button>
+                  </div>
+                </>
+              )}
+              {values.dealershipOrHome === 'dealership' && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'space-between',
+                    height: 'calc(100% - 49px)',
+                  }}
+                >
+                  <ParagraphPrimary>
+                    Selecione a concessionária mais perto de você.
+                  </ParagraphPrimary>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      columnGap: '1.6rem',
+                      margin: '1.6rem 0',
+                      height: 'calc(100% - 34px)',
+                    }}
+                  >
+                    <Map
+                      center={initialPosition}
+                      zoom={13}
+                      onmoveend={event => console.log(event.target.getBounds())}
+                    >
+                      <TileLayer
+                        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={[-23.5537361, -46.6538222]} />
+                    </Map>
+                    <div>jhadsçlkfjhadlkafhj</div>
+                  </div>
+                </div>
+              )}
             </div>
           </Step>
         )}
@@ -673,7 +789,13 @@ const Form = () => {
         >
           Voltar
         </button>
-        <button type="submit" disabled={currentStep === 3}>
+        <button
+          type="submit"
+          disabled={
+            currentStep === 3 ||
+            (currentStep === 2 && values.dealershipOrHome === '')
+          }
+        >
           Avançar
         </button>
       </StepperFooter>
