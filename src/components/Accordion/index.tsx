@@ -3,19 +3,16 @@ import { MdAdd, MdRemove } from 'react-icons/md';
 
 import { Container, ItemContainer, ItemTitle, ItemContent } from './style';
 
-import './style.css';
-
-type AccordionItemProps = {
+type SpecProps = {
   title: string;
-  content: string[][];
+  content: [string, string][];
 };
 
 type AccordionProps = {
-  titles: string[];
-  contents: string[][][];
+  specs: Array<SpecProps>;
 };
 
-const AccordionItem: React.FC<AccordionItemProps> = ({ title, content }) => {
+const AccordionItem: React.FC<SpecProps> = ({ title, content }) => {
   const [isActive, setIsActive] = useState(false);
   return (
     <ItemContainer>
@@ -29,7 +26,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, content }) => {
       </ItemTitle>
       <ItemContent isActive={isActive}>
         {content.map(item => (
-          <div>
+          <div key={item[0]}>
             <span>{item[0]}</span>
             <span>{item[1]}</span>
           </div>
@@ -39,36 +36,16 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, content }) => {
   );
 };
 
-const Accordion: React.FC<AccordionProps> = ({ titles, contents }) => {
+const Accordion: React.FC<AccordionProps> = ({ specs }) => {
   return (
     <Container>
-      {JSON.stringify(titles, null, 2)}
-      {JSON.stringify(contents, null, 2)}
-      {/* <AccordionItem title={titles} content={content} /> */}
-      {/* <AccordionItem
-        title="Consumo"
-        content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, possimus exercitationem consequuntur nostrum soluta excepturi amet necessitatibus, asperiores blanditiis ratione consequatur recusandae"
-      />
-      <AccordionItem
-        title="Segurança"
-        content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, possimus exercitationem consequuntur nostrum soluta excepturi amet necessitatibus, asperiores blanditiis ratione consequatur recusandae"
-      />
-      <AccordionItem
-        title="Manutenção"
-        content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, possimus exercitationem consequuntur nostrum soluta excepturi amet necessitatibus, asperiores blanditiis ratione consequatur recusandae"
-      />
-      <AccordionItem
-        title="Conforto"
-        content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, possimus exercitationem consequuntur nostrum soluta excepturi amet necessitatibus, asperiores blanditiis ratione consequatur recusandae"
-      />
-      <AccordionItem
-        title="Design"
-        content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, possimus exercitationem consequuntur nostrum soluta excepturi amet necessitatibus, asperiores blanditiis ratione consequatur recusandae"
-      />
-      <AccordionItem
-        title="Acessórios"
-        content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita, possimus exercitationem consequuntur nostrum soluta excepturi amet necessitatibus, asperiores blanditiis ratione consequatur recusandae"
-      /> */}
+      {specs.map(spec => (
+        <AccordionItem
+          key={spec.title}
+          title={spec.title}
+          content={spec.content}
+        />
+      ))}
     </Container>
   );
 };

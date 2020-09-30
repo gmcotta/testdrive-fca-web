@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 type ItemContentProps = {
   isActive: boolean;
@@ -21,17 +21,27 @@ export const ItemTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  text-transform: uppercase;
   border-bottom: 1px solid var(--color-primary);
+
+  & h1 {
+    font-size: 1.8rem;
+  }
 `;
 
 export const ItemContent = styled.div<ItemContentProps>`
   display: ${props => (props.isActive ? 'block' : 'none')};
   margin-top: 0.8rem;
+  transform: ${props =>
+    props.isActive ? 'translateY(0)' : 'translateY(calc(-100% - 20px))'};
+  opacity: ${props => (props.isActive ? '1' : '0')};
+  transition: 0.4s;
 
   & div {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 1.4rem;
     padding: 0 0.8rem;
 
     & span:nth-child(2) {

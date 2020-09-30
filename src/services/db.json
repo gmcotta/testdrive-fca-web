@@ -1,11 +1,37 @@
 {
-  "details": [
+  "specs": [
     {
       "id": 1,
       "car": "FIAT500",
-      "details": [
+      "name": "Fiat 500",
+      "price": 32850,
+      "specs": [
         {
           "title": "Desempenho",
+          "content": [
+            ["Cilindros", "4"],
+            ["Potência", "109 CV"],
+            ["Torque", "14,2 kgf.m"],
+            ["Velocidade máxima", "184 km/h"],
+            ["Transmissão", "Manual"],
+            ["Número de marchas", "5"],
+            ["Tração", "Dianteira"]
+          ]
+        },
+        {
+          "title": "Consumo",
+          "content": [
+            ["Cilindros", "4"],
+            ["Potência", "109 CV"],
+            ["Torque", "14,2 kgf.m"],
+            ["Velocidade máxima", "184 km/h"],
+            ["Transmissão", "Manual"],
+            ["Número de marchas", "5"],
+            ["Tração", "Dianteira"]
+          ]
+        },
+        {
+          "title": "Segurança",
           "content": [
             ["Cilindros", "4"],
             ["Potência", "109 CV"],
@@ -21,7 +47,9 @@
     {
       "id": 2,
       "car": "ARGO",
-      "details": [
+      "name": "Fiat Argo",
+      "price": 53990,
+      "specs": [
         {
           "title": "Consumo",
           "content": [

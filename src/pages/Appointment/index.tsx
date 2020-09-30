@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import Lottie from 'react-lottie';
 import Modal from 'react-modal';
+import { MdClose } from 'react-icons/md';
 
 import ARGO from '../../assets/carrossel_argo.png';
 import CRONOS from '../../assets/carrossel_cronos.png';
@@ -13,6 +14,8 @@ import RENEGADE from '../../assets/carrossel_renegade.png';
 import TORO from '../../assets/carrossel_toro.png';
 
 import animationData from '../../assets/animations/loading-1.json';
+
+import { serverApi } from '../../services/api';
 
 import Button from '../../components/Button';
 import Header from '../../components/Header';
@@ -41,13 +44,9 @@ type FormValues = {
   car: string;
 };
 
-type A = {
+type SpecsValues = {
   title: string;
   content: [string, string][];
-};
-
-type CarDetailsValue = {
-  [key: string]: Array<A>;
 };
 
 const Form = () => {
@@ -94,6 +93,15 @@ const Form = () => {
       neighborhood: false,
       city: false,
       uf: false,
+    }),
+    [],
+  );
+
+  const initialCarDetails = useMemo(
+    () => ({
+      name: '',
+      price: 0,
+      specs: [],
     }),
     [],
   );
@@ -149,64 +157,6 @@ const Form = () => {
     [],
   );
 
-  const carDetails = useMemo<CarDetailsValue>(
-    () => ({
-      FIAT500: [
-        {
-          title: 'Desempenho',
-          content: [
-            ['Cilindros', '4'],
-            ['Potência', '109 CV'],
-            ['Torque', '14,2 kgf.m'],
-            ['Velocidade máxima', '184 km/h'],
-            ['Transmissão', 'Manual'],
-            ['Número de marchas', '5'],
-            ['Tração', 'Dianteira'],
-          ],
-        },
-        {
-          title: 'Consumo',
-          content: [
-            ['Cilindros', '4'],
-            ['Potência', '109 CV'],
-            ['Torque', '14,2 kgf.m'],
-            ['Velocidade máxima', '184 km/h'],
-            ['Transmissão', 'Manual'],
-            ['Número de marchas', '5'],
-            ['Tração', 'Dianteira'],
-          ],
-        },
-      ],
-      ARGO: [
-        {
-          title: 'Desempenho',
-          content: [
-            ['Cilindros', '4'],
-            ['Potência', '109 CV'],
-            ['Torque', '14,2 kgf.m'],
-            ['Velocidade máxima', '184 km/h'],
-            ['Transmissão', 'Manual'],
-            ['Número de marchas', '5'],
-            ['Tração', 'Dianteira'],
-          ],
-        },
-        {
-          title: 'Consumo',
-          content: [
-            ['Cilindros', '4'],
-            ['Potência', '109 CV'],
-            ['Torque', '14,2 kgf.m'],
-            ['Velocidade máxima', '184 km/h'],
-            ['Transmissão', 'Manual'],
-            ['Número de marchas', '5'],
-            ['Tração', 'Dianteira'],
-          ],
-        },
-      ],
-    }),
-    [],
-  );
-
   const lottieOptions = useMemo(
     () => ({
       loop: true,
@@ -223,7 +173,8 @@ const Form = () => {
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [currentStep, setCurrentStep] = useState(1);
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+  const [carDetails, setCarDetails] = useState(initialCarDetails);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const defineErrorMessage = useCallback((key, message) => {
@@ -557,7 +508,7 @@ const Form = () => {
           <Step>
             <div>
               <HeadingPrimary>Carro</HeadingPrimary>
-              <ParagraphPrimary>{`Ótimo, ${values.firstName}. Agora, escolha seu carro!`}</ParagraphPrimary>
+              <ParagraphPrimary>{`Ótimo, ${values.firstName}! Agora, escolha seu carro.`}</ParagraphPrimary>
             </div>
             <div
               style={{
@@ -576,6 +527,15 @@ const Form = () => {
             <button
               type="button"
               onClick={() => {
+                serverApi.get(`specs?car=${values.car}`).then(response => {
+                  const { name, price, specs } = response.data[0];
+                  setCarDetails(oldValues => ({
+                    ...oldValues,
+                    name,
+                    price,
+                    specs,
+                  }));
+                });
                 setModalIsOpen(true);
               }}
             >
@@ -597,17 +557,62 @@ const Form = () => {
                   backgroundColor: 'var(--color-white)',
                   border: '1px solid var(--color-primary)',
                   display: 'flex',
+                  flexDirection: 'column',
                 },
               }}
             >
-              {/* {carDetails !== undefined && (
-                <Accordion
-                  titles={carDetails[values.car].map(car => car.title)}
-                  contents={carDetails[values.car].map(car => car.content)}
-                />
-              )} */}
-              {JSON.stringify(carDetails[values.car], null, 2)}
-              {JSON.stringify(carDetails[values.car], null, 2)}
+              <MdClose
+                size={20}
+                style={{
+                  cursor: 'pointer',
+                  position: 'absolute',
+                  top: '0.8rem',
+                  right: '0.8rem',
+                }}
+                onClick={() => {
+                  setModalIsOpen(false);
+                }}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                  marginBottom: '1.6rem',
+                }}
+              >
+                <h1>{carDetails.name}</h1>
+                <span>{carDetails.price}</span>
+              </div>
+              <Accordion
+                specs={carDetails.specs}
+                // specs={[
+                //   {
+                //     title: 'Desempenho',
+                //     content: [
+                //       ['Cilindros', '4'],
+                //       ['Potência', '109 CV'],
+                //       ['Torque', '14,2 kgf.m'],
+                //       ['Velocidade máxima', '184 km/h'],
+                //       ['Transmissão', 'Manual'],
+                //       ['Número de marchas', '5'],
+                //       ['Tração', 'Dianteira'],
+                //     ],
+                //   },
+                //   {
+                //     title: 'Consumo',
+                //     content: [
+                //       ['Cilindros', '8'],
+                //       ['Potência', '330 CV'],
+                //       ['Torque', '27,9 kgf.m'],
+                //       ['Velocidade máxima', '257 km/h'],
+                //       ['Transmissão', 'Manual'],
+                //       ['Número de marchas', '6'],
+                //       ['Tração', 'Dianteira'],
+                //     ],
+                //   },
+                // ]}
+              />
             </Modal>
           </Step>
         )}
