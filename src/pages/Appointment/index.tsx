@@ -16,6 +16,7 @@ import TORO from '../../assets/carrossel_toro.png';
 import animationData from '../../assets/animations/loading-1.json';
 
 import { serverApi } from '../../services/api';
+import formatCurrency from '../../services/formatCurrency';
 
 import Button from '../../components/Button';
 import Header from '../../components/Header';
@@ -42,11 +43,6 @@ type FormValues = {
   city: string;
   uf: string;
   car: string;
-};
-
-type SpecsValues = {
-  title: string;
-  content: [string, string][];
 };
 
 const Form = () => {
@@ -100,7 +96,7 @@ const Form = () => {
   const initialCarDetails = useMemo(
     () => ({
       name: '',
-      price: 0,
+      price: '',
       specs: [],
     }),
     [],
@@ -270,6 +266,7 @@ const Form = () => {
           }
           break;
         case 1:
+          nextStep();
           break;
         case 2:
           break;
@@ -552,7 +549,7 @@ const Form = () => {
                     setCarDetails(oldValues => ({
                       ...oldValues,
                       name,
-                      price,
+                      price: formatCurrency(price),
                       specs,
                     }));
                   });
