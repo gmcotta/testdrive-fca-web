@@ -481,7 +481,7 @@ const Form = () => {
                   }
                 </HeadingPrimary>
 
-                <Button to="/review">Agendar test drive</Button>
+                <Button to="/appointment">Agendar test drive</Button>
               </PhotoWrapper>
             )}
             {!apiResults.recommendation && !!apiResults.entities.length && (

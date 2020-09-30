@@ -506,114 +506,124 @@ const Form = () => {
         )}
         {currentStep === 1 && (
           <Step>
-            <div>
-              <HeadingPrimary>Carro</HeadingPrimary>
-              <ParagraphPrimary>{`Ótimo, ${values.firstName}! Agora, escolha seu carro.`}</ParagraphPrimary>
-            </div>
             <div
               style={{
-                width: 'min(50vw, 50rem)',
-                margin: '4.8rem auto 0',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
-              <Carousel
-                photos={recommendedCars.map(car => car.photo)}
-                captions={recommendedCars.map(car => car.caption)}
-                hasNav
-                optionValues={recommendedCars.map(car => car.name)}
-                setFormValue={setCarouselValue}
-              />
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                serverApi.get(`specs?car=${values.car}`).then(response => {
-                  const { name, price, specs } = response.data[0];
-                  setCarDetails(oldValues => ({
-                    ...oldValues,
-                    name,
-                    price,
-                    specs,
-                  }));
-                });
-                setModalIsOpen(true);
-              }}
-            >
-              Ver detalhes
-            </button>
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={() => setModalIsOpen(false)}
-              shouldCloseOnOverlayClick
-              style={{
-                overlay: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                  zIndex: 1000,
-                },
-                content: {
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translateX(-50%) translateY(-50%)',
-                  backgroundColor: 'var(--color-white)',
-                  border: '1px solid var(--color-primary)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                },
-              }}
-            >
-              <MdClose
-                size={20}
-                style={{
-                  cursor: 'pointer',
-                  position: 'absolute',
-                  top: '0.8rem',
-                  right: '0.8rem',
-                }}
-                onClick={() => {
-                  setModalIsOpen(false);
-                }}
-              />
+              <div>
+                <HeadingPrimary>Carro</HeadingPrimary>
+                <ParagraphPrimary>{`Ótimo, ${values.firstName}! Agora, escolha seu carro.`}</ParagraphPrimary>
+              </div>
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end',
-                  marginBottom: '1.6rem',
+                  width: 'min(40vw, 40rem)',
+                  margin: '4.8rem auto 0',
                 }}
               >
-                <h1>{carDetails.name}</h1>
-                <span>{carDetails.price}</span>
+                <Carousel
+                  photos={recommendedCars.map(car => car.photo)}
+                  captions={recommendedCars.map(car => car.caption)}
+                  hasNav
+                  optionValues={recommendedCars.map(car => car.name)}
+                  setFormValue={setCarouselValue}
+                />
               </div>
-              <Accordion
-                specs={carDetails.specs}
-                // specs={[
-                //   {
-                //     title: 'Desempenho',
-                //     content: [
-                //       ['Cilindros', '4'],
-                //       ['Potência', '109 CV'],
-                //       ['Torque', '14,2 kgf.m'],
-                //       ['Velocidade máxima', '184 km/h'],
-                //       ['Transmissão', 'Manual'],
-                //       ['Número de marchas', '5'],
-                //       ['Tração', 'Dianteira'],
-                //     ],
-                //   },
-                //   {
-                //     title: 'Consumo',
-                //     content: [
-                //       ['Cilindros', '8'],
-                //       ['Potência', '330 CV'],
-                //       ['Torque', '27,9 kgf.m'],
-                //       ['Velocidade máxima', '257 km/h'],
-                //       ['Transmissão', 'Manual'],
-                //       ['Número de marchas', '6'],
-                //       ['Tração', 'Dianteira'],
-                //     ],
-                //   },
-                // ]}
-              />
-            </Modal>
+              <button
+                style={{
+                  padding: '1.6rem',
+                  margin: '1.6rem 0',
+                  borderRadius: '4px',
+                  border: 'none',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+                  cursor: 'pointer',
+                  fontSize: '2.4rem',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  backgroundColor: 'var(--color-primary)',
+                  color: 'var(--color-light)',
+                  alignSelf: 'center',
+                }}
+                type="button"
+                onClick={() => {
+                  serverApi.get(`specs?car=${values.car}`).then(response => {
+                    const { name, price, specs } = response.data[0];
+                    setCarDetails(oldValues => ({
+                      ...oldValues,
+                      name,
+                      price,
+                      specs,
+                    }));
+                  });
+                  setModalIsOpen(true);
+                }}
+              >
+                Ver detalhes
+              </button>
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                shouldCloseOnOverlayClick
+                style={{
+                  overlay: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    zIndex: 1000,
+                  },
+                  content: {
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translateX(-50%) translateY(-50%)',
+                    backgroundColor: 'var(--color-white)',
+                    border: '1px solid var(--color-primary)',
+                    display: 'flex',
+                    height: '80vh',
+                    flexDirection: 'column',
+                  },
+                }}
+              >
+                <MdClose
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '0.8rem',
+                    right: '0.8rem',
+                  }}
+                  onClick={() => {
+                    setModalIsOpen(false);
+                  }}
+                />
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                    marginBottom: '1.6rem',
+                    borderBottom: '1px solid var(--color-primary)',
+                  }}
+                >
+                  <h1
+                    style={{
+                      textTransform: 'uppercase',
+                      fontSize: '3.2rem',
+                      color: 'var(--color-primary)',
+                    }}
+                  >
+                    {carDetails.name}
+                  </h1>
+                  <span
+                    style={{
+                      fontSize: '2rem',
+                      color: 'var(--color-primary)',
+                    }}
+                  >
+                    {carDetails.price}
+                  </span>
+                </div>
+                <Accordion specs={carDetails.specs} />
+              </Modal>
+            </div>
           </Step>
         )}
         {currentStep === 2 && (
