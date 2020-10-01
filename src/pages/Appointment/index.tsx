@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import Lottie from 'react-lottie';
 import Modal from 'react-modal';
-import { MdClose } from 'react-icons/md';
+import { MdClose, MdLocationOn, MdPhone } from 'react-icons/md';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 
 import ARGO from '../../assets/carrossel_argo.png';
@@ -45,6 +45,12 @@ type FormValues = {
   uf: string;
   car: string;
   dealershipOrHome: string;
+};
+
+type dealershipDetailsValues = {
+  id: number;
+  latitude: number;
+  longitude: number;
 };
 
 const Form = () => {
@@ -101,6 +107,23 @@ const Form = () => {
       name: '',
       price: '',
       specs: [],
+    }),
+    [],
+  );
+
+  const initialDealershipDetails = useMemo(
+    () => ({
+      id: 0,
+      latitude: 0,
+      longitude: 0,
+      name: '',
+      address: '',
+      addressNumber: 0,
+      neighborhood: '',
+      city: '',
+      uf: '',
+      phone: '',
+      photo: '',
     }),
     [],
   );
@@ -173,6 +196,12 @@ const Form = () => {
   const [touched, setTouched] = useState(initialTouched);
   const [currentStep, setCurrentStep] = useState(2);
   const [carDetails, setCarDetails] = useState(initialCarDetails);
+  const [dealershipLocations, setDealershipLocations] = useState<
+    dealershipDetailsValues[]
+  >([]);
+  const [dealershipDetails, setDealershipDetails] = useState(
+    initialDealershipDetails,
+  );
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
@@ -359,6 +388,14 @@ const Form = () => {
       defineErrorMessage('uf', '');
     }
   }, [values, defineErrorMessage]);
+
+  useEffect(() => {
+    if (values.dealershipOrHome === 'dealership') {
+      serverApi.get('/dealership-locations').then(response => {
+        setDealershipLocations(response.data);
+      });
+    }
+  }, [values]);
 
   return (
     <StepperForm onSubmit={event => handleSubmit(event)}>
@@ -733,16 +770,94 @@ const Form = () => {
                   >
                     <Map
                       center={initialPosition}
-                      zoom={13}
-                      onmoveend={event => console.log(event.target.getBounds())}
+                      zoom={12}
+                      // onmoveend={event => console.log(event.target.getBounds())}
                     >
                       <TileLayer
                         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       />
-                      <Marker position={[-23.5537361, -46.6538222]} />
+                      {dealershipLocations &&
+                        dealershipLocations.map(location => (
+                          <Marker
+                            key={location.id}
+                            position={[location.latitude, location.longitude]}
+                            onclick={() => {
+                              console.log(location.id);
+                              serverApi
+                                .get(`/dealerships/${location.id}`)
+                                .then(response => {
+                                  const dealership = response.data;
+                                  setDealershipDetails(dealership);
+                                });
+                            }}
+                          />
+                        ))}
                     </Map>
-                    <div>jhadsçlkfjhadlkafhj</div>
+                    <div
+                      style={{
+                        backgroundColor: 'var(--color-white)',
+                        borderRadius: '4px',
+                        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                        padding: '1.6rem',
+                      }}
+                    >
+                      <div
+                        style={{ display: 'flex', justifyContent: 'center' }}
+                      >
+                        <img
+                          style={{
+                            width: '80%',
+                            margin: '0 auto',
+                          }}
+                          src={dealershipDetails.photo}
+                          alt={dealershipDetails.name}
+                        />
+                      </div>
+                      <p
+                        style={{
+                          fontSize: '2.4rem',
+                          textAlign: 'center',
+                          marginTop: '0.8rem',
+                          paddingBottom: '0.8rem',
+                          borderBottom: '1px solid var(--color-primary)',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {dealershipDetails.name}
+                      </p>
+                      <div
+                        style={{
+                          display: 'flex',
+                          marginTop: '1.6rem',
+                          fontSize: '2rem',
+                        }}
+                      >
+                        <MdLocationOn
+                          color="var(--color-primary)"
+                          style={{ marginRight: '0.8rem' }}
+                        />
+                        <div>
+                          <p>{`${dealershipDetails.address}, ${dealershipDetails.addressNumber}`}</p>
+                          <p>{dealershipDetails.neighborhood}</p>
+                          <p>{`${dealershipDetails.city} - ${dealershipDetails.uf}`}</p>
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginTop: '0.8rem',
+                          fontSize: '2rem',
+                        }}
+                      >
+                        <MdPhone
+                          color="var(--color-primary)"
+                          style={{ marginRight: '0.8rem' }}
+                        />
+                        <p>{dealershipDetails.phone}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

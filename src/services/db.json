@@ -64,5 +64,63 @@
         }
       ]
     }
+  ],
+  "dealerships": [
+    {
+      "id": 1,
+      "latitude": -23.479352,
+      "longitude": -46.712049,
+      "name": "Concessionária do Zé",
+      "address": "Rua Otto de Alencar",
+      "addressNumber": 1787,
+      "neighborhood": "Liberdade",
+      "city": "São Paulo",
+      "uf": "SP",
+      "phone": "11 3123-0530",
+      "photo": "https://lh3.googleusercontent.com/proxy/vUNoMzJhAXKt1d4MRsc6cpYoLLiBFX1PsJlhHWhZ3r62RtoZAcsbsuZDwVkmqs4lyGaqG_HoeTZegHYrSIm2GIlLcIuba2nprogfu0GcTmS6Mg"
+    },
+    {
+      "id": 2,
+      "latitude": -23.565445,
+      "longitude": -46.627435,
+      "name": "BTC Multimarcas",
+      "address": "Rua João Eugênio",
+      "addressNumber": 109,
+      "neighborhood": "Vila Jacuí",
+      "city": "São Paulo",
+      "uf": "SP",
+      "phone": "11 3549-9829",
+      "photo": "https://s2.glbimg.com/7YCewE73vtFwSR1FTe76baUhdfw=/e.glbimg.com/og/ed/f/original/2015/05/28/concessionaria.jpg"
+    },
+    {
+      "id": 3,
+      "latitude": -23.634491,
+      "longitude": -46.658000,
+      "name": "FIAT Astolfo",
+      "address": "Rua Estevão Marcate",
+      "addressNumber": 814,
+      "neighborhood": "Vila Laura",
+      "city": "São Paulo",
+      "uf": "SP",
+      "phone": "11 3614-3547",
+      "photo": "https://agazetabahia.com/painel/modulos/artigos/images/15345074661532606966152474975915157690971.jpg"
+    }
+  ],
+  "dealership-locations": [
+    {
+      "id": 1,
+      "latitude": -23.479352,
+      "longitude": -46.712049
+    },
+    {
+      "id": 2,
+      "latitude": -23.565445,
+      "longitude": -46.627435
+    },
+    {
+      "id": 3,
+      "latitude": -23.634491,
+      "longitude": -46.658000
+    }
   ]
 }
