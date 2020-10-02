@@ -77,20 +77,384 @@
       "city": "São Paulo",
       "uf": "SP",
       "phone": "11 3123-0530",
-      "photo": "https://lh3.googleusercontent.com/proxy/vUNoMzJhAXKt1d4MRsc6cpYoLLiBFX1PsJlhHWhZ3r62RtoZAcsbsuZDwVkmqs4lyGaqG_HoeTZegHYrSIm2GIlLcIuba2nprogfu0GcTmS6Mg"
+      "photo": "https://quatrorodas.abril.com.br/wp-content/uploads/2016/11/57d2c9680e2163027000a471concessionaria-da-honda.jpeg?quality=70&strip=all",
+      "schedule": [
+        {
+          "day": "03-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "04-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": false
+            },
+            {
+              "hour": 12,
+              "available": false
+            },
+            {
+              "hour": 13,
+              "available": false
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": false
+            }
+          ]
+        },
+        {
+          "day": "05-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": true
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "06-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 2,
       "latitude": -23.565445,
       "longitude": -46.627435,
       "name": "BTC Multimarcas",
-      "address": "Rua João Eugênio",
+      "address": "Rua João Eugênio Jorge Aragão Didi da Silva Orlando Flórida Schubbles Astolfo Roberval Josivaldo Neves dos Campos",
       "addressNumber": 109,
       "neighborhood": "Vila Jacuí",
       "city": "São Paulo",
       "uf": "SP",
       "phone": "11 3549-9829",
-      "photo": "https://s2.glbimg.com/7YCewE73vtFwSR1FTe76baUhdfw=/e.glbimg.com/og/ed/f/original/2015/05/28/concessionaria.jpg"
+      "photo": "https://s2.glbimg.com/7YCewE73vtFwSR1FTe76baUhdfw=/e.glbimg.com/og/ed/f/original/2015/05/28/concessionaria.jpg",
+      "schedule": [
+        {
+          "day": "03-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "04-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": false
+            },
+            {
+              "hour": 12,
+              "available": false
+            },
+            {
+              "hour": 13,
+              "available": false
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": false
+            }
+          ]
+        },
+        {
+          "day": "05-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": true
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "06-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 3,
@@ -103,10 +467,192 @@
       "city": "São Paulo",
       "uf": "SP",
       "phone": "11 3614-3547",
-      "photo": "https://agazetabahia.com/painel/modulos/artigos/images/15345074661532606966152474975915157690971.jpg"
+      "photo": "https://agazetabahia.com/painel/modulos/artigos/images/15345074661532606966152474975915157690971.jpg",
+      "schedule": [
+        {
+          "day": "03-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "04-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": false
+            },
+            {
+              "hour": 12,
+              "available": false
+            },
+            {
+              "hour": 13,
+              "available": false
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": false
+            }
+          ]
+        },
+        {
+          "day": "05-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": true
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "06-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        }
+      ]
     }
   ],
-  "dealership-locations": [
+  "dealerships-locations": [
     {
       "id": 1,
       "latitude": -23.479352,
@@ -121,6 +667,563 @@
       "id": 3,
       "latitude": -23.634491,
       "longitude": -46.658000
+    }
+  ],
+  "dealerships-schedule": [
+    {
+      "id": 1,
+      "schedule": [
+        {
+          "day": "03-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "04-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": false
+            },
+            {
+              "hour": 12,
+              "available": false
+            },
+            {
+              "hour": 13,
+              "available": false
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": false
+            }
+          ]
+        },
+        {
+          "day": "05-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": true
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "06-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "schedule": [
+        {
+          "day": "03-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "04-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": false
+            },
+            {
+              "hour": 12,
+              "available": false
+            },
+            {
+              "hour": 13,
+              "available": false
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": false
+            }
+          ]
+        },
+        {
+          "day": "05-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": true
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "06-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "schedule": [
+        {
+          "day": "03-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "04-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": false
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": false
+            },
+            {
+              "hour": 12,
+              "available": false
+            },
+            {
+              "hour": 13,
+              "available": false
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": false
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": false
+            }
+          ]
+        },
+        {
+          "day": "05-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": true
+            },
+            {
+              "hour": 10,
+              "available": true
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": true
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": true
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        },
+        {
+          "day": "06-10-2020",
+          "hours": [
+            {
+              "hour": 8,
+              "available": true
+            },
+            {
+              "hour": 9,
+              "available": false
+            },
+            {
+              "hour": 10,
+              "available": false
+            },
+            {
+              "hour": 11,
+              "available": true
+            },
+            {
+              "hour": 12,
+              "available": true
+            },
+            {
+              "hour": 13,
+              "available": true
+            },
+            {
+              "hour": 14,
+              "available": false
+            },
+            {
+              "hour": 15,
+              "available": true
+            },
+            {
+              "hour": 16,
+              "available": false
+            },
+            {
+              "hour": 17,
+              "available": true
+            }
+          ]
+        }
+      ]
     }
   ]
 }

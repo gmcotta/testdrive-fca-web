@@ -3,6 +3,8 @@ import Lottie from 'react-lottie';
 import Modal from 'react-modal';
 import { MdClose, MdLocationOn, MdPhone } from 'react-icons/md';
 import { Map, TileLayer, Marker } from 'react-leaflet';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 import ARGO from '../../assets/carrossel_argo.png';
 import CRONOS from '../../assets/carrossel_cronos.png';
@@ -45,6 +47,7 @@ type FormValues = {
   uf: string;
   car: string;
   dealershipOrHome: string;
+  dealershipId: number;
 };
 
 type dealershipDetailsValues = {
@@ -67,7 +70,8 @@ const Form = () => {
       city: '',
       uf: '',
       car: '',
-      dealershipOrHome: 'dealership',
+      dealershipOrHome: '',
+      dealershipId: 0,
     }),
     [],
   );
@@ -208,6 +212,7 @@ const Form = () => {
     -23.5537361,
     -46.6538222,
   ]);
+  const [selectedDate, setSelectedDate] = useState<Date | Date[]>(new Date());
 
   const defineErrorMessage = useCallback((key, message) => {
     setErrors(oldErrors => ({
@@ -262,8 +267,11 @@ const Form = () => {
   }, []);
 
   const prevStep = useCallback(() => {
+    if (currentStep >= 2) {
+      setValues(oldValues => ({ ...oldValues, dealershipOrHome: '' }));
+    }
     setCurrentStep(oldStep => oldStep - 1);
-  }, []);
+  }, [currentStep]);
 
   const nextStep = useCallback(() => {
     setCurrentStep(oldStep => oldStep + 1);
@@ -309,6 +317,9 @@ const Form = () => {
           nextStep();
           break;
         case 2:
+          if (values.dealershipId !== 0) {
+            nextStep();
+          }
           break;
         default:
           break;
@@ -391,7 +402,7 @@ const Form = () => {
 
   useEffect(() => {
     if (values.dealershipOrHome === 'dealership') {
-      serverApi.get('/dealership-locations').then(response => {
+      serverApi.get('/dealerships-locations').then(response => {
         setDealershipLocations(response.data);
       });
     }
@@ -740,6 +751,7 @@ const Form = () => {
                           ...oldValues,
                           dealershipOrHome: 'home',
                         }));
+                        nextStep();
                       }}
                     >
                       Quero receber o vendedor
@@ -764,7 +776,7 @@ const Form = () => {
                       display: 'grid',
                       gridTemplateColumns: '1fr 1fr',
                       columnGap: '1.6rem',
-                      margin: '1.6rem 0',
+                      margin: '3.2rem 0',
                       height: 'calc(100% - 34px)',
                     }}
                   >
@@ -789,6 +801,10 @@ const Form = () => {
                                 .then(response => {
                                   const dealership = response.data;
                                   setDealershipDetails(dealership);
+                                  setValues(oldValues => ({
+                                    ...oldValues,
+                                    dealershipId: response.data.id,
+                                  }));
                                 });
                             }}
                           />
@@ -802,61 +818,72 @@ const Form = () => {
                         padding: '1.6rem',
                       }}
                     >
-                      <div
-                        style={{ display: 'flex', justifyContent: 'center' }}
-                      >
-                        <img
-                          style={{
-                            width: '80%',
-                            margin: '0 auto',
-                          }}
-                          src={dealershipDetails.photo}
-                          alt={dealershipDetails.name}
-                        />
-                      </div>
-                      <p
-                        style={{
-                          fontSize: '2.4rem',
-                          textAlign: 'center',
-                          marginTop: '0.8rem',
-                          paddingBottom: '0.8rem',
-                          borderBottom: '1px solid var(--color-primary)',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {dealershipDetails.name}
-                      </p>
-                      <div
-                        style={{
-                          display: 'flex',
-                          marginTop: '1.6rem',
-                          fontSize: '2rem',
-                        }}
-                      >
-                        <MdLocationOn
-                          color="var(--color-primary)"
-                          style={{ marginRight: '0.8rem' }}
-                        />
+                      {values.dealershipId === 0 ? (
                         <div>
-                          <p>{`${dealershipDetails.address}, ${dealershipDetails.addressNumber}`}</p>
-                          <p>{dealershipDetails.neighborhood}</p>
-                          <p>{`${dealershipDetails.city} - ${dealershipDetails.uf}`}</p>
+                          <p>Escolha uma concessionária para avançar</p>
                         </div>
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          marginTop: '0.8rem',
-                          fontSize: '2rem',
-                        }}
-                      >
-                        <MdPhone
-                          color="var(--color-primary)"
-                          style={{ marginRight: '0.8rem' }}
-                        />
-                        <p>{dealershipDetails.phone}</p>
-                      </div>
+                      ) : (
+                        <>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <img
+                              style={{
+                                width: '80%',
+                                margin: '0 auto',
+                              }}
+                              src={dealershipDetails.photo}
+                              alt={dealershipDetails.name}
+                            />
+                          </div>
+                          <p
+                            style={{
+                              fontSize: '2.4rem',
+                              textAlign: 'center',
+                              marginTop: '0.8rem',
+                              paddingBottom: '0.8rem',
+                              borderBottom: '1px solid var(--color-primary)',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            {dealershipDetails.name}
+                          </p>
+                          <div
+                            style={{
+                              display: 'flex',
+                              marginTop: '1.6rem',
+                              fontSize: '2rem',
+                            }}
+                          >
+                            <MdLocationOn
+                              color="var(--color-primary)"
+                              style={{ marginRight: '0.8rem', flex: 'none' }}
+                            />
+                            <div>
+                              <p>{`${dealershipDetails.address}, ${dealershipDetails.addressNumber}`}</p>
+                              <p>{dealershipDetails.neighborhood}</p>
+                              <p>{`${dealershipDetails.city} - ${dealershipDetails.uf}`}</p>
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              marginTop: '0.8rem',
+                              fontSize: '2rem',
+                            }}
+                          >
+                            <MdPhone
+                              color="var(--color-primary)"
+                              style={{ marginRight: '0.8rem', flex: 'none' }}
+                            />
+                            <p>{dealershipDetails.phone}</p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -867,7 +894,34 @@ const Form = () => {
         {currentStep === 3 && (
           <Step>
             <div>
-              <HeadingPrimary>Obrigado</HeadingPrimary>
+              <HeadingPrimary>Dia e hora</HeadingPrimary>
+              <ParagraphPrimary>
+                Falta pouco! Escolha o melhor dia e hora para você.
+              </ParagraphPrimary>
+            </div>
+            <div style={{ height: 'calc(100% - 34px)' }}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  columnGap: '1.6rem',
+                  margin: '3.2rem 0',
+                  height: 'calc(100% - 84px - 3.2rem)',
+                }}
+              >
+                <div>
+                  <Calendar
+                    value={selectedDate}
+                    onChange={value => {
+                      setSelectedDate(value);
+                    }}
+                    locale="pt-BR"
+                    minDate={new Date()}
+                    tileDisabled={({ date }) => date.getDay() === 0}
+                  />
+                </div>
+                <div>{selectedDate.toLocaleString()}</div>
+              </div>
             </div>
           </Step>
         )}
@@ -908,7 +962,10 @@ const Form = () => {
           type="submit"
           disabled={
             currentStep === 3 ||
-            (currentStep === 2 && values.dealershipOrHome === '')
+            (currentStep === 2 && values.dealershipOrHome === '') ||
+            (currentStep === 2 &&
+              values.dealershipOrHome === 'dealership' &&
+              values.dealershipId === 0)
           }
         >
           Avançar
