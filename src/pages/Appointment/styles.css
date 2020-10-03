@@ -1,0 +1,48 @@
+.data-form-container__first-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+
+
+.hour-button {
+  font-size: 2.4rem;
+  padding: 0.8rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hour-button:disabled {
+  background-color: var(--color-gray-light);
+  color: var(--color-gray-dark);
+  border: 1px solid var(--color-gray-light);
+  border-radius: 4px;
+  cursor: not-allowed;
+}
+
+.hour-button:not(:disabled):hover {
+  font-weight: 700;
+}
+
+.hour-button--active {
+  font-size: 2.4rem;
+  padding: 0.8rem;
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+
+.hour-button-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 5;
+  column-gap: 1.6rem;
+  row-gap: 1.6rem;
+}

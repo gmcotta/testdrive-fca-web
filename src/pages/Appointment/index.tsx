@@ -4,7 +4,9 @@ import Modal from 'react-modal';
 import { MdClose, MdLocationOn, MdPhone } from 'react-icons/md';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import Calendar from 'react-calendar';
+import { startOfDay } from 'date-fns';
 import 'react-calendar/dist/Calendar.css';
+import './styles.css';
 
 import ARGO from '../../assets/carrossel_argo.png';
 import CRONOS from '../../assets/carrossel_cronos.png';
@@ -48,12 +50,24 @@ type FormValues = {
   car: string;
   dealershipOrHome: string;
   dealershipId: number;
+  appointmentDay: Date | Date[];
+  appointmentHour: number;
 };
 
-type dealershipDetailsValues = {
+type DealershipDetailsValues = {
   id: number;
   latitude: number;
   longitude: number;
+};
+
+type AvailabilityValues = {
+  hour: number;
+  available: boolean;
+};
+
+type ScheduleValues = {
+  day: string;
+  hours: AvailabilityValues[];
 };
 
 const Form = () => {
@@ -72,6 +86,8 @@ const Form = () => {
       car: '',
       dealershipOrHome: '',
       dealershipId: 0,
+      appointmentDay: startOfDay(new Date()),
+      appointmentHour: 0,
     }),
     [],
   );
@@ -195,13 +211,29 @@ const Form = () => {
     [],
   );
 
+  const defaultAvailability = useMemo(
+    () => [
+      { available: true, hour: 8 },
+      { available: true, hour: 9 },
+      { available: true, hour: 10 },
+      { available: true, hour: 11 },
+      { available: true, hour: 12 },
+      { available: true, hour: 13 },
+      { available: true, hour: 14 },
+      { available: true, hour: 15 },
+      { available: true, hour: 16 },
+      { available: true, hour: 17 },
+    ],
+    [],
+  );
+
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
   const [currentStep, setCurrentStep] = useState(2);
   const [carDetails, setCarDetails] = useState(initialCarDetails);
   const [dealershipLocations, setDealershipLocations] = useState<
-    dealershipDetailsValues[]
+    DealershipDetailsValues[]
   >([]);
   const [dealershipDetails, setDealershipDetails] = useState(
     initialDealershipDetails,
@@ -213,6 +245,13 @@ const Form = () => {
     -46.6538222,
   ]);
   const [selectedDate, setSelectedDate] = useState<Date | Date[]>(new Date());
+  const [dealershipSchedule, setDealershipSchedule] = useState<
+    ScheduleValues[]
+  >([]);
+  const [scheduleFullDays, setScheduleFullDays] = useState<Date[]>([]);
+  const [availability, setAvailability] = useState<AvailabilityValues[]>(
+    defaultAvailability,
+  );
 
   const defineErrorMessage = useCallback((key, message) => {
     setErrors(oldErrors => ({
@@ -408,6 +447,42 @@ const Form = () => {
     }
   }, [values]);
 
+  // Get all busy days
+  useEffect(() => {
+    if (currentStep === 3) {
+      serverApi.get('dealerships-schedule/1').then(response => {
+        const { schedule } = response.data;
+        setDealershipSchedule(schedule);
+        schedule.map((day: ScheduleValues) => {
+          const filledHourQuantity = day.hours.reduce((acc, { available }) => {
+            return !available ? acc + 1 : acc;
+          }, 0);
+          if (day.hours.length === filledHourQuantity) {
+            setScheduleFullDays(oldValues => [...oldValues, new Date(day.day)]);
+          }
+        });
+      });
+    }
+  }, [currentStep]);
+
+  useEffect(() => {
+    setValues(oldValues => ({
+      ...oldValues,
+      appointmentHour: 0,
+    }));
+    const hours = dealershipSchedule.find(schedule => {
+      return (
+        startOfDay(new Date(schedule.day)).toLocaleString() ===
+        startOfDay(new Date(selectedDate.toString())).toLocaleString()
+      );
+    })?.hours;
+    if (hours !== undefined) {
+      setAvailability(hours);
+    } else {
+      setAvailability(defaultAvailability);
+    }
+  }, [dealershipSchedule, selectedDate, defaultAvailability]);
+
   return (
     <StepperForm onSubmit={event => handleSubmit(event)}>
       <>
@@ -421,6 +496,7 @@ const Form = () => {
             </div>
             <FormGroup>
               <div
+                className="data-form-container__first-row"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
@@ -914,13 +990,35 @@ const Form = () => {
                     value={selectedDate}
                     onChange={value => {
                       setSelectedDate(value);
+                      setValues(oldValues => ({
+                        ...oldValues,
+                        appointmentDay: value,
+                      }));
                     }}
                     locale="pt-BR"
                     minDate={new Date()}
-                    tileDisabled={({ date }) => date.getDay() === 0}
                   />
                 </div>
-                <div>{selectedDate.toLocaleString()}</div>
+                <div className="hour-button-container">
+                  {availability.map(hour => (
+                    <button
+                      className={`hour-button${
+                        values.appointmentHour === hour.hour ? '--active' : ''
+                      }`}
+                      key={hour.hour}
+                      type="button"
+                      disabled={!hour.available}
+                      onClick={() => {
+                        setValues(oldValues => ({
+                          ...oldValues,
+                          appointmentHour: hour.hour,
+                        }));
+                      }}
+                    >
+                      {`${hour.hour}:00`}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </Step>
@@ -961,11 +1059,12 @@ const Form = () => {
         <button
           type="submit"
           disabled={
-            currentStep === 3 ||
+            currentStep === 5 ||
             (currentStep === 2 && values.dealershipOrHome === '') ||
             (currentStep === 2 &&
               values.dealershipOrHome === 'dealership' &&
-              values.dealershipId === 0)
+              values.dealershipId === 0) ||
+            values.appointmentHour === 0
           }
         >
           Avançar
