@@ -230,7 +230,7 @@ const Form = () => {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(3);
   const [carDetails, setCarDetails] = useState(initialCarDetails);
   const [dealershipLocations, setDealershipLocations] = useState<
     DealershipDetailsValues[]
@@ -465,6 +465,7 @@ const Form = () => {
     }
   }, [currentStep]);
 
+  // Reset appointment hour and set hour buttons values and availability
   useEffect(() => {
     setValues(oldValues => ({
       ...oldValues,
@@ -495,15 +496,7 @@ const Form = () => {
               </ParagraphPrimary>
             </div>
             <FormGroup>
-              <div
-                className="data-form-container__first-row"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridColumnGap: '1.6rem',
-                  marginBottom: '1.6rem',
-                }}
-              >
+              <div className="data-form-container__first-row">
                 <Input
                   id="firstName"
                   label="Nome"
@@ -525,14 +518,7 @@ const Form = () => {
                   hasError={touched.lastName && !!errors.lastName}
                 />
               </div>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridColumnGap: '1.6rem',
-                  marginBottom: '1.6rem',
-                }}
-              >
+              <div className="data-form-container__first-row">
                 <Input
                   id="phone"
                   label="Telefone"
@@ -556,14 +542,7 @@ const Form = () => {
                   hasError={touched.email && !!errors.email}
                 />
               </div>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 14rem 22rem',
-                  gridColumnGap: '1.6rem',
-                  marginBottom: '1.6rem',
-                }}
-              >
+              <div className="data-form-container__third-row">
                 <Input
                   id="address"
                   label="Endereço"
@@ -594,14 +573,7 @@ const Form = () => {
                   optional
                 />
               </div>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr 10rem',
-                  gridColumnGap: '1.6rem',
-                  marginBottom: '1.6rem',
-                }}
-              >
+              <div className="data-form-container__fourth-row">
                 <Input
                   id="neighborhood"
                   label="Bairro"
@@ -638,22 +610,12 @@ const Form = () => {
         )}
         {currentStep === 1 && (
           <Step>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
+            <div className="car-step__wrapper">
               <div>
                 <HeadingPrimary>Carro</HeadingPrimary>
                 <ParagraphPrimary>{`Ótimo, ${values.firstName}! Agora, escolha seu carro.`}</ParagraphPrimary>
               </div>
-              <div
-                style={{
-                  width: 'min(40vw, 40rem)',
-                  margin: '4.8rem auto 0',
-                }}
-              >
+              <div className="car-step__carousel-wrapper">
                 <Carousel
                   photos={recommendedCars.map(car => car.photo)}
                   captions={recommendedCars.map(car => car.caption)}
@@ -663,20 +625,7 @@ const Form = () => {
                 />
               </div>
               <button
-                style={{
-                  padding: '1.6rem',
-                  margin: '1.6rem 0',
-                  borderRadius: '4px',
-                  border: 'none',
-                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
-                  cursor: 'pointer',
-                  fontSize: '2.4rem',
-                  textTransform: 'uppercase',
-                  textDecoration: 'none',
-                  backgroundColor: 'var(--color-primary)',
-                  color: 'var(--color-light)',
-                  alignSelf: 'center',
-                }}
+                className="details-button"
                 type="button"
                 onClick={() => {
                   serverApi.get(`specs?car=${values.car}`).then(response => {
@@ -716,40 +665,14 @@ const Form = () => {
               >
                 <MdClose
                   size={20}
-                  style={{
-                    cursor: 'pointer',
-                    position: 'absolute',
-                    top: '0.8rem',
-                    right: '0.8rem',
-                  }}
+                  className="details-modal__close-button"
                   onClick={() => {
                     setModalIsOpen(false);
                   }}
                 />
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
-                    marginBottom: '1.6rem',
-                    borderBottom: '1px solid var(--color-primary)',
-                  }}
-                >
-                  <h1
-                    style={{
-                      textTransform: 'uppercase',
-                      fontSize: '3.2rem',
-                      color: 'var(--color-primary)',
-                    }}
-                  >
-                    {carDetails.name}
-                  </h1>
-                  <span
-                    style={{
-                      fontSize: '2rem',
-                      color: 'var(--color-primary)',
-                    }}
-                  >
+                <div className="details-modal__title-wrapper">
+                  <h1 className="details-modal__title">{carDetails.name}</h1>
+                  <span className="details-modal__price-text">
                     {carDetails.price}
                   </span>
                 </div>
@@ -760,7 +683,7 @@ const Form = () => {
         )}
         {currentStep === 2 && (
           <Step>
-            <div style={{ height: '100%' }}>
+            <div className="location-step__wrapper">
               <HeadingPrimary>Local</HeadingPrimary>
               {values.dealershipOrHome === '' && (
                 <>
@@ -774,28 +697,9 @@ const Form = () => {
                       endereço indicado anteriormente.
                     </ParagraphPrimary>
                   </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      margin: '3.2rem 0',
-                    }}
-                  >
+                  <div className="location-step__location-option-wrapper">
                     <button
-                      style={{
-                        padding: '1.6rem',
-                        margin: '1.6rem 0',
-                        borderRadius: '4px',
-                        border: 'none',
-                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
-                        cursor: 'pointer',
-                        fontSize: '2.4rem',
-                        textTransform: 'uppercase',
-                        textDecoration: 'none',
-                        backgroundColor: 'var(--color-primary)',
-                        color: 'var(--color-light)',
-                        alignSelf: 'center',
-                      }}
+                      className="details-button"
                       type="button"
                       onClick={() => {
                         setValues(oldValues => ({
@@ -807,20 +711,7 @@ const Form = () => {
                       Vou na concessionária
                     </button>
                     <button
-                      style={{
-                        padding: '1.6rem',
-                        margin: '1.6rem 0',
-                        borderRadius: '4px',
-                        border: 'none',
-                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
-                        cursor: 'pointer',
-                        fontSize: '2.4rem',
-                        textTransform: 'uppercase',
-                        textDecoration: 'none',
-                        backgroundColor: 'var(--color-primary)',
-                        color: 'var(--color-light)',
-                        alignSelf: 'center',
-                      }}
+                      className="details-button"
                       type="button"
                       onClick={() => {
                         setValues(oldValues => ({
@@ -836,26 +727,11 @@ const Form = () => {
                 </>
               )}
               {values.dealershipOrHome === 'dealership' && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'space-between',
-                    height: 'calc(100% - 49px)',
-                  }}
-                >
+                <div className="location-step__dealership-wrapper">
                   <ParagraphPrimary>
                     Selecione a concessionária mais perto de você.
                   </ParagraphPrimary>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      columnGap: '1.6rem',
-                      margin: '3.2rem 0',
-                      height: 'calc(100% - 34px)',
-                    }}
-                  >
+                  <div className="location-step__dealership-content">
                     <Map
                       center={initialPosition}
                       zoom={12}
@@ -886,57 +762,27 @@ const Form = () => {
                           />
                         ))}
                     </Map>
-                    <div
-                      style={{
-                        backgroundColor: 'var(--color-white)',
-                        borderRadius: '4px',
-                        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                        padding: '1.6rem',
-                      }}
-                    >
+                    <div className="location-step__dealership-card">
                       {values.dealershipId === 0 ? (
                         <div>
                           <p>Escolha uma concessionária para avançar</p>
                         </div>
                       ) : (
                         <>
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'center',
-                            }}
-                          >
+                          <div className="dealership-card__image-wrapper">
                             <img
-                              style={{
-                                width: '80%',
-                                margin: '0 auto',
-                              }}
+                              className="dealership-card__image"
                               src={dealershipDetails.photo}
                               alt={dealershipDetails.name}
                             />
                           </div>
-                          <p
-                            style={{
-                              fontSize: '2.4rem',
-                              textAlign: 'center',
-                              marginTop: '0.8rem',
-                              paddingBottom: '0.8rem',
-                              borderBottom: '1px solid var(--color-primary)',
-                              fontWeight: 'bold',
-                            }}
-                          >
+                          <p className="dealership-card__title">
                             {dealershipDetails.name}
                           </p>
-                          <div
-                            style={{
-                              display: 'flex',
-                              marginTop: '1.6rem',
-                              fontSize: '2rem',
-                            }}
-                          >
+                          <div className="dealership-card__content-wrapper">
                             <MdLocationOn
                               color="var(--color-primary)"
-                              style={{ marginRight: '0.8rem', flex: 'none' }}
+                              className="dealership-card__content-icon"
                             />
                             <div>
                               <p>{`${dealershipDetails.address}, ${dealershipDetails.addressNumber}`}</p>
@@ -944,17 +790,10 @@ const Form = () => {
                               <p>{`${dealershipDetails.city} - ${dealershipDetails.uf}`}</p>
                             </div>
                           </div>
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              marginTop: '0.8rem',
-                              fontSize: '2rem',
-                            }}
-                          >
+                          <div className="dealership-card__content-wrapper--single-line">
                             <MdPhone
                               color="var(--color-primary)"
-                              style={{ marginRight: '0.8rem', flex: 'none' }}
+                              className="dealership-card__content-icon"
                             />
                             <p>{dealershipDetails.phone}</p>
                           </div>
@@ -975,16 +814,8 @@ const Form = () => {
                 Falta pouco! Escolha o melhor dia e hora para você.
               </ParagraphPrimary>
             </div>
-            <div style={{ height: 'calc(100% - 34px)' }}>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  columnGap: '1.6rem',
-                  margin: '3.2rem 0',
-                  height: 'calc(100% - 84px - 3.2rem)',
-                }}
-              >
+            <div className="datetime-step__wrapper">
+              <div className="datetime-step__content-wrapper">
                 <div>
                   <Calendar
                     value={selectedDate}
@@ -999,7 +830,7 @@ const Form = () => {
                     minDate={new Date()}
                   />
                 </div>
-                <div className="hour-button-container">
+                <div className="datetime-step__hour-option-wrapper">
                   {availability.map(hour => (
                     <button
                       className={`hour-button${
@@ -1024,20 +855,7 @@ const Form = () => {
           </Step>
         )}
         {isLoading && (
-          <div
-            style={{
-              zIndex: 10,
-              position: 'absolute',
-              top: '0',
-              left: '0',
-              backgroundColor: 'rgba(0, 0, 0, 0.1)',
-              width: '100vw',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <div className="loading-screen">
             <Lottie
               options={lottieOptions}
               height={400}

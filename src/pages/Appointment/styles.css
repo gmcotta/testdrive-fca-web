@@ -5,6 +5,159 @@
   margin-bottom: 1.6rem;
 }
 
+.data-form-container__third-row {
+  display: grid;
+  grid-template-columns: 1fr 14rem 22rem;
+  grid-column-gap: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+
+.data-form-container__fourth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 10rem;
+  grid-column-gap: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+
+.car-step__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.car-step__carousel-wrapper {
+  width: min(40vw, 40rem);
+  margin: 4.8rem auto 0;
+}
+
+.details-modal__close-button {
+  cursor: pointer;
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+}
+
+.details-modal__title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1.6rem;
+  border-bottom: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.details-modal__title {
+  text-transform: uppercase;
+  font-size: 3.2rem;
+}
+
+.details-modal__price-text {
+  font-size: 2rem;
+}
+
+.details-button {
+  padding: 1.6rem;
+  margin: 1.6rem 0;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  font-size: 2.4rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: var(--color-primary);
+  color: var(--color-light);
+  align-self: center;
+}
+
+.location-step__wrapper {
+  height: 100%;
+}
+
+.location-step__location-option-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 3.2rem 0;
+}
+
+.location-step__dealership-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  height: calc(100% - 49px);
+}
+
+.location-step__dealership-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.6rem;
+  margin: 3.2rem 0;
+  height: calc(100% - 34px);
+}
+
+.location-step__dealership-card {
+  background-color: var(--color-white);
+  border-radius: 4px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 1.6rem;
+}
+
+.dealership-card__image-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.dealership-card__image {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.dealership-card__title {
+  font-size: 2.4rem;
+  text-align: center;
+  margin-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--color-primary);
+  font-weight: bold;
+}
+
+.dealership-card__content-wrapper {
+  display: flex;
+  margin-top: 1.6rem;
+  font-size: 2rem;
+}
+
+.dealership-card__content-icon {
+  color: var(--color-primary);
+  margin-right: 0.8rem;
+  flex: none;
+}
+
+.dealership-card__content-wrapper--single-line {
+  display: flex;
+  align-items: center;
+  margin-top: 0.8rem;
+  font-size: 2rem;
+}
+
+.datetime-step__wrapper {
+  height: calc(100% - 34px);
+}
+
+.datetime-step__content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.6rem;
+  margin: 3.2rem 0;
+  height: calc(100% - 84px - 3.2rem)
+}
+
+.datetime-step__hour-option-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 5;
+  column-gap: 1.6rem;
+  row-gap: 1.6rem;
+}
 
 .hour-button {
   font-size: 2.4rem;
@@ -38,11 +191,15 @@
   font-weight: 700;
 }
 
-
-.hour-button-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 5;
-  column-gap: 1.6rem;
-  row-gap: 1.6rem;
+.loading-screen {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
