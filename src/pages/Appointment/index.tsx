@@ -5,6 +5,7 @@ import { MdClose, MdLocationOn, MdPhone } from 'react-icons/md';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import Calendar from 'react-calendar';
 import { startOfDay } from 'date-fns';
+import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
 import './styles.css';
 
@@ -42,7 +43,7 @@ type FormValues = {
   phone: string;
   email: string;
   address: string;
-  addressNumber: string;
+  addressNumber: number;
   addressComplement: string;
   neighborhood: string;
   city: string;
@@ -77,12 +78,12 @@ const Form = () => {
       lastName: '',
       phone: '',
       email: '',
-      address: '',
-      addressNumber: '',
+      address: 'Rua Veríssimo',
+      addressNumber: 35,
       addressComplement: '',
-      neighborhood: '',
-      city: '',
-      uf: '',
+      neighborhood: 'Campo Belo',
+      city: 'Guarulhos',
+      uf: 'SP',
       car: '',
       dealershipOrHome: '',
       dealershipId: 0,
@@ -230,7 +231,7 @@ const Form = () => {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(2);
   const [carDetails, setCarDetails] = useState(initialCarDetails);
   const [dealershipLocations, setDealershipLocations] = useState<
     DealershipDetailsValues[]
@@ -241,8 +242,8 @@ const Form = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [initialPosition, setInitialPosition] = useState<[number, number]>([
-    -23.5537361,
-    -46.6538222,
+    0,
+    0,
   ]);
   const [selectedDate, setSelectedDate] = useState<Date | Date[]>(new Date());
   const [dealershipSchedule, setDealershipSchedule] = useState<
@@ -306,11 +307,15 @@ const Form = () => {
   }, []);
 
   const prevStep = useCallback(() => {
-    if (currentStep >= 2) {
+    if (currentStep === 2 && values.dealershipOrHome === 'dealership') {
       setValues(oldValues => ({ ...oldValues, dealershipOrHome: '' }));
+    } else if (currentStep >= 2) {
+      setValues(oldValues => ({ ...oldValues, dealershipOrHome: '' }));
+      setCurrentStep(oldStep => oldStep - 1);
+    } else {
+      setCurrentStep(oldStep => oldStep - 1);
     }
-    setCurrentStep(oldStep => oldStep - 1);
-  }, [currentStep]);
+  }, [currentStep, values.dealershipOrHome]);
 
   const nextStep = useCallback(() => {
     setCurrentStep(oldStep => oldStep + 1);
@@ -370,6 +375,25 @@ const Form = () => {
   const setCarouselValue = useCallback((car: string) => {
     setValues(oldValues => ({ ...oldValues, car }));
   }, []);
+
+  // Get user position based on address
+  useEffect(() => {
+    if (currentStep === 2 && values.dealershipOrHome === 'dealership') {
+      axios
+        .get(
+          `https://api.opencagedata.com/geocode/v1/json?key=${process.env.REACT_APP_MAP_API_KEY}&q=${values.city},%20${values.uf}&pretty=1&limit=1&&countrycode=br&language=pt-br`,
+        )
+        .then(response => {
+          const result = response.data.results[0].geometry;
+          console.log(result);
+          setInitialPosition([result.lat, result.lng]);
+        });
+    }
+  }, [currentStep, values.dealershipOrHome, values.city, values.uf]);
+
+  // const getNearestDealership = useCallback(() => {
+
+  // }, []);
 
   // Set error messages
   useEffect(() => {
@@ -734,7 +758,7 @@ const Form = () => {
                   <div className="location-step__dealership-content">
                     <Map
                       center={initialPosition}
-                      zoom={12}
+                      zoom={13}
                       // onmoveend={event => console.log(event.target.getBounds())}
                     >
                       <TileLayer
@@ -882,7 +906,7 @@ const Form = () => {
             (currentStep === 2 &&
               values.dealershipOrHome === 'dealership' &&
               values.dealershipId === 0) ||
-            values.appointmentHour === 0
+            (currentStep === 3 && values.appointmentHour === 0)
           }
         >
           Avançar
