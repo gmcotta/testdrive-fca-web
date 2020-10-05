@@ -55,6 +55,11 @@ type FormValues = {
   appointmentHour: number;
 };
 
+type ClosestDealershipValues = {
+  id: number;
+  distance: number;
+};
+
 type DealershipDetailsValues = {
   id: number;
   latitude: number;
@@ -145,6 +150,14 @@ const Form = () => {
       uf: '',
       phone: '',
       photo: '',
+    }),
+    [],
+  );
+
+  const initialClosestDealership = useMemo(
+    () => ({
+      id: 0,
+      distance: 0,
     }),
     [],
   );
@@ -253,6 +266,9 @@ const Form = () => {
   const [availability, setAvailability] = useState<AvailabilityValues[]>(
     defaultAvailability,
   );
+  const [closestDealership, setClosestDealership] = useState<
+    ClosestDealershipValues
+  >(initialClosestDealership);
 
   const defineErrorMessage = useCallback((key, message) => {
     setErrors(oldErrors => ({
@@ -308,18 +324,40 @@ const Form = () => {
 
   const prevStep = useCallback(() => {
     if (currentStep === 2 && values.dealershipOrHome === 'dealership') {
-      setValues(oldValues => ({ ...oldValues, dealershipOrHome: '' }));
+      setValues(oldValues => ({
+        ...oldValues,
+        dealershipOrHome: '',
+        dealershipId: 0,
+      }));
+      setClosestDealership(initialClosestDealership);
     } else if (currentStep >= 2) {
-      setValues(oldValues => ({ ...oldValues, dealershipOrHome: '' }));
+      setValues(oldValues => ({
+        ...oldValues,
+        dealershipOrHome: '',
+        dealershipId: 0,
+      }));
+      setClosestDealership(initialClosestDealership);
       setCurrentStep(oldStep => oldStep - 1);
     } else {
       setCurrentStep(oldStep => oldStep - 1);
     }
-  }, [currentStep, values.dealershipOrHome]);
+  }, [currentStep, values.dealershipOrHome, initialClosestDealership]);
 
   const nextStep = useCallback(() => {
     setCurrentStep(oldStep => oldStep + 1);
   }, []);
+
+  const getUserPosition = useCallback(() => {
+    axios
+      .get(
+        `https://api.opencagedata.com/geocode/v1/json?key=${process.env.REACT_APP_MAP_API_KEY}&q=${values.city},%20${values.uf}&pretty=1&limit=1&&countrycode=br&language=pt-br`,
+      )
+      .then(response => {
+        const result = response.data.results[0].geometry;
+        console.log(result);
+        setInitialPosition([result.lat, result.lng]);
+      });
+  }, [values.city, values.uf]);
 
   const handleSubmit = useCallback(
     event => {
@@ -350,6 +388,7 @@ const Form = () => {
               uf: true,
             }));
           } else {
+            getUserPosition();
             nextStep();
           }
           break;
@@ -376,6 +415,39 @@ const Form = () => {
     setValues(oldValues => ({ ...oldValues, car }));
   }, []);
 
+  const getDealershipDistance = useCallback(() => {
+    console.log('verificar concessionária mais próxima');
+    if (closestDealership && closestDealership.id === 0) {
+      serverApi.get('/dealerships-locations').then(response => {
+        setDealershipLocations(response.data);
+        const dealershipsDistance = dealershipLocations.map(dealership => {
+          const triangleHeight = Math.abs(
+            dealership.latitude - initialPosition[0],
+          );
+          const triangleWidth = Math.abs(
+            dealership.longitude - initialPosition[1],
+          );
+          const distance = Math.sqrt(triangleHeight ** 2 + triangleWidth ** 2);
+          return {
+            id: dealership.id,
+            distance,
+          };
+        });
+        const closestDistance = dealershipsDistance.sort(
+          (a, b) => a.distance - b.distance,
+        )[0];
+        console.log('concessionária mais perto: ', closestDistance);
+        if (closestDistance !== undefined) {
+          setValues(oldValues => ({
+            ...oldValues,
+            dealershipId: closestDistance.id,
+          }));
+        }
+        setClosestDealership(closestDistance);
+      });
+    }
+  }, [dealershipLocations, initialPosition]);
+
   // Get user position based on address
   useEffect(() => {
     if (currentStep === 2 && values.dealershipOrHome === 'dealership') {
@@ -388,12 +460,18 @@ const Form = () => {
           console.log(result);
           setInitialPosition([result.lat, result.lng]);
         });
+      serverApi.get('/dealerships-locations').then(response => {
+        setDealershipLocations(response.data);
+      });
     }
   }, [currentStep, values.dealershipOrHome, values.city, values.uf]);
 
-  // const getNearestDealership = useCallback(() => {
-
-  // }, []);
+  // Get nearest dealership
+  useEffect(() => {
+    if (currentStep === 3 && values.dealershipOrHome === 'home') {
+      getDealershipDistance();
+    }
+  }, [values.dealershipOrHome, currentStep, getDealershipDistance]);
 
   // Set error messages
   useEffect(() => {
@@ -463,31 +541,33 @@ const Form = () => {
     }
   }, [values, defineErrorMessage]);
 
-  useEffect(() => {
-    if (values.dealershipOrHome === 'dealership') {
-      serverApi.get('/dealerships-locations').then(response => {
-        setDealershipLocations(response.data);
-      });
-    }
-  }, [values]);
-
   // Get all busy days
   useEffect(() => {
-    if (currentStep === 3) {
-      serverApi.get('dealerships-schedule/1').then(response => {
-        const { schedule } = response.data;
-        setDealershipSchedule(schedule);
-        schedule.map((day: ScheduleValues) => {
-          const filledHourQuantity = day.hours.reduce((acc, { available }) => {
-            return !available ? acc + 1 : acc;
-          }, 0);
-          if (day.hours.length === filledHourQuantity) {
-            setScheduleFullDays(oldValues => [...oldValues, new Date(day.day)]);
-          }
+    if (currentStep === 3 && values.dealershipId !== 0) {
+      console.log('Concessionária atual', values.dealershipId);
+      serverApi
+        .get(`dealerships-schedule/${values.dealershipId}`)
+        .then(response => {
+          const { schedule } = response.data;
+          console.log(schedule);
+          setDealershipSchedule(schedule);
+          schedule.map((day: ScheduleValues) => {
+            const filledHourQuantity = day.hours.reduce(
+              (acc, { available }) => {
+                return !available ? acc + 1 : acc;
+              },
+              0,
+            );
+            if (day.hours.length === filledHourQuantity) {
+              setScheduleFullDays(oldValues => [
+                ...oldValues,
+                new Date(day.day),
+              ]);
+            }
+          });
         });
-      });
     }
-  }, [currentStep]);
+  }, [currentStep, closestDealership, values.dealershipId]);
 
   // Reset appointment hour and set hour buttons values and availability
   useEffect(() => {
