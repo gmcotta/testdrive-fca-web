@@ -20,7 +20,8 @@ import MAREA from '../../assets/carrossel_marea.png';
 import RENEGADE from '../../assets/carrossel_renegade.png';
 import TORO from '../../assets/carrossel_toro.png';
 
-import animationData from '../../assets/animations/loading-1.json';
+import loadingAnimation from '../../assets/animations/loading-1.json';
+import successAnimation from '../../assets/animations/success.json';
 
 import { serverApi } from '../../services/api';
 import formatCurrency from '../../services/formatCurrency';
@@ -222,11 +223,23 @@ const Form = () => {
     [],
   );
 
-  const lottieOptions = useMemo(
+  const loadingAnimationOptions = useMemo(
     () => ({
       loop: true,
       autoplay: true,
-      animationData,
+      animationData: loadingAnimation,
+      rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+      },
+    }),
+    [],
+  );
+
+  const thankYouAnimationOptions = useMemo(
+    () => ({
+      loop: false,
+      autoplay: true,
+      animationData: successAnimation,
       rendererSettings: {
         preserveAspectRatio: 'xMidYMid slice',
       },
@@ -423,6 +436,26 @@ const Form = () => {
               appointmentConfirmation: true,
             }));
           } else {
+            serverApi.post('/appointments', {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              phone: values.phone,
+              email: values.email,
+              address: values.address,
+              addressNumber: values.addressNumber,
+              addressComplement: values.addressComplement,
+              neighborhood: values.neighborhood,
+              city: values.city,
+              uf: values.uf,
+              car: values.car,
+              dealershipOrHome: values.dealershipOrHome,
+              dealershipId: values.dealershipId,
+              appointmentDay: values.appointmentDay,
+              appointmentHour: values.appointmentHour,
+              appointmentConfirmation: values.appointmentConfirmation,
+              emailOptIn: values.emailOptIn,
+              phoneOptIn: values.phoneOptIn,
+            });
             nextStep();
           }
           break;
@@ -430,7 +463,7 @@ const Form = () => {
           break;
       }
     },
-    [errors, currentStep, nextStep, values.dealershipId, getUserPosition],
+    [errors, currentStep, nextStep, values, getUserPosition],
   );
 
   const setCarouselValue = useCallback((car: string) => {
@@ -1112,11 +1145,32 @@ const Form = () => {
             </div>
           </Step>
         )}
-
+        {currentStep === 5 && (
+          <Step>
+            <HeadingPrimary>Tudo Certo!</HeadingPrimary>
+            <div>
+              <Lottie
+                options={thankYouAnimationOptions}
+                height={400}
+                width={400}
+                isClickToPauseDisabled
+              />
+            </div>
+            <div>
+              <ParagraphPrimary>
+                Parabéns! Seu test drive está agendado!
+              </ParagraphPrimary>
+              <ParagraphPrimary>
+                Você receberá um email com detalhes sobre o test drive.
+              </ParagraphPrimary>
+              <ParagraphPrimary>Nos vemos em breve!</ParagraphPrimary>
+            </div>
+          </Step>
+        )}
         {isLoading && (
           <div className="loading-screen">
             <Lottie
-              options={lottieOptions}
+              options={loadingAnimationOptions}
               height={400}
               width={400}
               isClickToPauseDisabled
