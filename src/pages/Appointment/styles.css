@@ -191,6 +191,15 @@
   font-weight: 700;
 }
 
+.confirmation-step__opt-in-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.confirmation-step__content-wrapper {
+  margin-top: 3.2rem;
+}
+
 .loading-screen {
   z-index: 10;
   position: absolute;

@@ -9,10 +9,15 @@ export const Container = styled.div`
   width: 100%;
   flex-direction: column;
   margin-bottom: 0.8rem;
+  background-color: var(--color-white);
+  padding: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-primary);
 `;
 
 export const ItemContainer = styled.div`
   margin-bottom: 0.8rem;
+  background-color: var(--color-white);
 `;
 
 export const ItemTitle = styled.div`
@@ -36,6 +41,7 @@ export const ItemContent = styled.div<ItemContentProps>`
     props.isActive ? 'translateY(0)' : 'translateY(calc(-100% - 20px))'};
   opacity: ${props => (props.isActive ? '1' : '0')};
   transition: 0.4s;
+  background-color: var(--color-white);
 
   & div {
     display: flex;
@@ -46,6 +52,7 @@ export const ItemContent = styled.div<ItemContentProps>`
 
     & span:nth-child(2) {
       font-weight: 700;
+      margin-left: 1.6rem;
     }
   }
 

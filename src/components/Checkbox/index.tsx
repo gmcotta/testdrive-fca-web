@@ -1,7 +1,7 @@
 import React from 'react';
 import { MdCheck } from 'react-icons/md';
 
-import { Container, Wrapper, Box, Label } from './styles';
+import { Container, Wrapper, Box, Label, ErrorMessage } from './styles';
 
 type CheckboxProps = React.HTMLProps<HTMLInputElement> & {
   label: string;
@@ -36,13 +36,15 @@ const Checkbox: React.FC<CheckboxProps> = ({
         <label htmlFor={id}>
           <Box hasError={hasError}>
             <span>
-              <MdCheck size={12} />
+              <MdCheck color="var(--color-white)" size={12} />
             </span>
           </Box>
           <Label>{label}</Label>
         </label>
       </Wrapper>
-      {hasError && <span>{errorMessage}</span>}
+      {hasError && (
+        <ErrorMessage hasError={hasError}>{errorMessage}</ErrorMessage>
+      )}
     </Container>
   );
 };

@@ -42,6 +42,7 @@
           "tsx": "never"
         }
       ],
+      "import/no-duplicates": "off",
       "jsx-a11y/label-has-associated-control": [
         "error",
         {

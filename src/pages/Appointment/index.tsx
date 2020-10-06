@@ -4,7 +4,8 @@ import Modal from 'react-modal';
 import { MdClose, MdLocationOn, MdPhone } from 'react-icons/md';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import Calendar from 'react-calendar';
-import { startOfDay } from 'date-fns';
+import { startOfDay, format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
 import './styles.css';
@@ -53,6 +54,9 @@ type FormValues = {
   dealershipId: number;
   appointmentDay: Date | Date[];
   appointmentHour: number;
+  appointmentConfirmation: boolean;
+  emailOptIn: boolean;
+  phoneOptIn: boolean;
 };
 
 type ClosestDealershipValues = {
@@ -79,21 +83,24 @@ type ScheduleValues = {
 const Form = () => {
   const initialValues = useMemo(
     () => ({
-      firstName: '',
-      lastName: '',
-      phone: '',
-      email: '',
-      address: 'Rua Veríssimo',
-      addressNumber: 35,
+      firstName: 'Gustavo',
+      lastName: 'Matias Cotta',
+      phone: '11 95632-1452',
+      email: 'exemplo@gmail.com',
+      address: 'Rua Georgina de Albuquerque',
+      addressNumber: 184,
       addressComplement: '',
-      neighborhood: 'Campo Belo',
-      city: 'Guarulhos',
+      neighborhood: 'Jardim Jabaquara',
+      city: 'São Paulo',
       uf: 'SP',
-      car: '',
+      car: 'Fiat 500',
       dealershipOrHome: '',
       dealershipId: 0,
       appointmentDay: startOfDay(new Date()),
       appointmentHour: 0,
+      appointmentConfirmation: false,
+      emailOptIn: false,
+      phoneOptIn: false,
     }),
     [],
   );
@@ -109,6 +116,7 @@ const Form = () => {
       neighborhood: '',
       city: '',
       uf: '',
+      appointmentConfirmation: '',
     }),
     [],
   );
@@ -124,6 +132,7 @@ const Form = () => {
       neighborhood: false,
       city: false,
       uf: false,
+      appointmentConfirmation: false,
     }),
     [],
   );
@@ -404,11 +413,24 @@ const Form = () => {
             nextStep();
           }
           break;
+        case 3:
+          nextStep();
+          break;
+        case 4:
+          if (errors.appointmentConfirmation) {
+            setTouched(oldTouched => ({
+              ...oldTouched,
+              appointmentConfirmation: true,
+            }));
+          } else {
+            nextStep();
+          }
+          break;
         default:
           break;
       }
     },
-    [errors, currentStep, nextStep],
+    [errors, currentStep, nextStep, values.dealershipId, getUserPosition],
   );
 
   const setCarouselValue = useCallback((car: string) => {
@@ -538,6 +560,16 @@ const Form = () => {
       defineErrorMessage('uf', 'UF inválido');
     } else {
       defineErrorMessage('uf', '');
+    }
+
+    if (!values.appointmentConfirmation) {
+      defineErrorMessage(
+        'appointmentConfirmation',
+        'Necessário marcar a opção',
+      );
+    }
+    if (values.appointmentConfirmation) {
+      defineErrorMessage('appointmentConfirmation', '');
     }
   }, [values, defineErrorMessage]);
 
@@ -958,6 +990,129 @@ const Form = () => {
             </div>
           </Step>
         )}
+        {currentStep === 4 && (
+          <Step>
+            <div>
+              <HeadingPrimary>Confirmação</HeadingPrimary>
+              <ParagraphPrimary>
+                Por fim, verifique seus dados.
+              </ParagraphPrimary>
+            </div>
+            <div className="confirmation-step__content-wrapper">
+              <Accordion
+                specs={[
+                  {
+                    title: 'Dados',
+                    content: [
+                      ['Nome', `${values.firstName} ${values.lastName}`],
+                      ['Telefone', `${values.phone}`],
+                      ['Email', `${values.email}`],
+                      [
+                        'Endereço',
+                        `${values.address}, ${values.addressNumber} ${
+                          values.addressComplement &&
+                          `, ${values.addressComplement}`
+                        }`,
+                      ],
+                      ['Bairro', `${values.neighborhood}`],
+                      ['Cidade/UF', `${values.city}/${values.uf}`],
+                    ],
+                  },
+                  {
+                    title: 'Carro',
+                    content: [['Carro', `${values.car}`]],
+                  },
+                  {
+                    title: 'Local',
+                    content: [
+                      [
+                        'Local',
+                        `${
+                          values.dealershipOrHome === 'dealership'
+                            ? 'Concessionária'
+                            : 'Casa'
+                        }`,
+                      ],
+                      [
+                        'Endereço',
+                        `${
+                          values.dealershipOrHome === 'dealership'
+                            ? `${dealershipDetails.address}, ${dealershipDetails.addressNumber}`
+                            : `${values.address}, ${values.addressNumber} ${
+                                values.addressComplement &&
+                                `, ${values.addressComplement}`
+                              }`
+                        }`,
+                      ],
+                      [
+                        'Bairro',
+                        `${
+                          values.dealershipOrHome === 'dealership'
+                            ? `${dealershipDetails.neighborhood}`
+                            : `${values.neighborhood}`
+                        }`,
+                      ],
+                      [
+                        'Cidade/UF',
+                        `${
+                          values.dealershipOrHome === 'dealership'
+                            ? `${dealershipDetails.city}/${dealershipDetails.uf}`
+                            : `${values.city}/${values.uf}`
+                        }`,
+                      ],
+                    ],
+                  },
+                  {
+                    title: 'Data e Hora',
+                    content: [
+                      [
+                        'Data',
+                        `${format(
+                          new Date(values.appointmentDay.toString()),
+                          "dd 'de' MMMM 'de' yyyy",
+                          { locale: ptBR },
+                        )}`,
+                      ],
+                      ['Hora', `${values.appointmentHour}:00`],
+                    ],
+                  },
+                ]}
+              />
+              <div className="confirmation-step__opt-in-wrapper">
+                <Checkbox
+                  id="appointmentConfirmation"
+                  label="Aceito os termos de compromisso"
+                  name="appointmentConfirmation"
+                  checked={values.appointmentConfirmation}
+                  onChange={event => handleChange(event)}
+                  onBlur={event => handleBlur(event)}
+                  errorMessage={errors.appointmentConfirmation}
+                  hasError={
+                    touched.appointmentConfirmation &&
+                    !!errors.appointmentConfirmation
+                  }
+                />
+                <Checkbox
+                  id="emailOptIn"
+                  label="Quero receber ofertas por email"
+                  name="emailOptIn"
+                  checked={values.emailOptIn}
+                  onChange={event => handleChange(event)}
+                  onBlur={event => handleBlur(event)}
+                />
+                <Checkbox
+                  id="phoneOptIn"
+                  label="Quero receber ofertas por SMS"
+                  name="phoneOptIn"
+                  checked={values.phoneOptIn}
+                  onChange={event => handleChange(event)}
+                  onBlur={event => handleBlur(event)}
+                />
+              </div>
+            </div>
+          </Step>
+        )}
+
         {isLoading && (
           <div className="loading-screen">
             <Lottie
@@ -989,7 +1144,7 @@ const Form = () => {
             (currentStep === 3 && values.appointmentHour === 0)
           }
         >
-          Avançar
+          {currentStep === 4 ? 'Concluir' : 'Avançar'}
         </button>
       </StepperFooter>
     </StepperForm>

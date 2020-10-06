@@ -28,6 +28,8 @@ export const Wrapper = styled.div<CheckboxProps>`
         display: flex;
         align-items: center;
         justify-content: center;
+        color: ${props =>
+          props.hasError ? 'var(--color-red)' : 'var(--color-dark)'};
       }
     }
 
@@ -47,13 +49,6 @@ export const Wrapper = styled.div<CheckboxProps>`
     cursor: pointer;
     color: ${props =>
       props.hasError ? 'var(--color-red)' : 'var(--color-dark)'};
-  }
-
-  > span {
-    font-size: 1.6rem;
-    color: var(--color-red);
-    font-weight: 500;
-    margin-top: 0.8rem;
   }
 `;
 
@@ -76,4 +71,10 @@ export const Box = styled.div<CheckboxProps>`
 export const Label = styled.span`
   margin-left: 0.8rem;
   font-size: 1.2rem;
+`;
+
+export const ErrorMessage = styled.span<CheckboxProps>`
+  color: var(--color-red);
+  font-weight: 500;
+  margin-top: 0.8rem;
 `;

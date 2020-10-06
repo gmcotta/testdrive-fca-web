@@ -536,7 +536,7 @@ const Form = () => {
           Voltar
         </button>
         <button type="submit" disabled={currentStep === 3}>
-          Avançar
+          {currentStep === 2 ? 'Concluir' : 'Avançar'}
         </button>
       </StepperFooter>
     </StepperForm>
