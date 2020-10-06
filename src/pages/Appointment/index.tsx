@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import Lottie from 'react-lottie';
 import Modal from 'react-modal';
-import { MdClose, MdLocationOn, MdPhone } from 'react-icons/md';
+import { MdClose, MdLocationOn, MdPhone, MdCheck } from 'react-icons/md';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import Calendar from 'react-calendar';
 import { startOfDay, format } from 'date-fns';
@@ -35,7 +35,15 @@ import Checkbox from '../../components/Checkbox';
 import Carousel from '../../components/Carousel';
 import Accordion from '../../components/Accordion';
 
-import { StepperForm, Step, StepperFooter, FormGroup } from './styles';
+import {
+  StepperHeader,
+  StepperHeaderSteps,
+  StepperHeaderPaths,
+  StepperForm,
+  Step,
+  StepperFooter,
+  FormGroup,
+} from './styles';
 
 Modal.setAppElement('#root');
 
@@ -45,7 +53,7 @@ type FormValues = {
   phone: string;
   email: string;
   address: string;
-  addressNumber: number;
+  addressNumber: number | string;
   addressComplement: string;
   neighborhood: string;
   city: string;
@@ -82,19 +90,23 @@ type ScheduleValues = {
 };
 
 const Form = () => {
+  const headerTitles = useMemo(
+    () => ['Dados', 'Carro', 'Local', 'Data e Hora', 'Confirmação'],
+    [],
+  );
   const initialValues = useMemo(
     () => ({
-      firstName: 'Gustavo',
-      lastName: 'Matias Cotta',
-      phone: '11 95632-1452',
-      email: 'exemplo@gmail.com',
-      address: 'Rua Georgina de Albuquerque',
-      addressNumber: 184,
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: '',
+      address: '',
+      addressNumber: '',
       addressComplement: '',
-      neighborhood: 'Jardim Jabaquara',
-      city: 'São Paulo',
-      uf: 'SP',
-      car: 'Fiat 500',
+      neighborhood: '',
+      city: '',
+      uf: '',
+      car: '',
       dealershipOrHome: '',
       dealershipId: 0,
       appointmentDay: startOfDay(new Date()),
@@ -266,7 +278,7 @@ const Form = () => {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState(initialErrors);
   const [touched, setTouched] = useState(initialTouched);
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
   const [carDetails, setCarDetails] = useState(initialCarDetails);
   const [dealershipLocations, setDealershipLocations] = useState<
     DealershipDetailsValues[]
@@ -589,7 +601,7 @@ const Form = () => {
     }
     if (!values.uf) {
       defineErrorMessage('uf', 'UF obrigatório');
-    } else if (!values.uf.match(/[A-Z]{2}/)) {
+    } else if (!values.uf.match(/^[A-Z]{2}$/)) {
       defineErrorMessage('uf', 'UF inválido');
     } else {
       defineErrorMessage('uf', '');
@@ -656,6 +668,53 @@ const Form = () => {
   return (
     <StepperForm onSubmit={event => handleSubmit(event)}>
       <>
+        {currentStep !== 5 && (
+          <StepperHeader>
+            <div className="stepper-header__steps-wrapper">
+              <div>
+                <StepperHeaderSteps active={currentStep >= 0}>
+                  {currentStep < 1 ? '1' : <MdCheck size={16} />}
+                </StepperHeaderSteps>
+              </div>
+              <StepperHeaderPaths active={currentStep >= 1} />
+              <div>
+                <StepperHeaderSteps active={currentStep >= 1}>
+                  {currentStep < 2 ? '2' : <MdCheck size={16} />}
+                </StepperHeaderSteps>
+              </div>
+              <StepperHeaderPaths active={currentStep >= 2} />
+              <div>
+                <StepperHeaderSteps active={currentStep >= 2}>
+                  {currentStep < 3 ? '3' : <MdCheck size={16} />}
+                </StepperHeaderSteps>
+              </div>
+              <StepperHeaderPaths active={currentStep >= 3} />
+              <div>
+                <StepperHeaderSteps active={currentStep >= 3}>
+                  {currentStep < 4 ? '4' : <MdCheck size={16} />}
+                </StepperHeaderSteps>
+              </div>
+              <StepperHeaderPaths active={currentStep >= 4} />
+              <div>
+                <StepperHeaderSteps active={currentStep >= 4}>
+                  {currentStep < 5 ? '5' : <MdCheck size={16} />}
+                </StepperHeaderSteps>
+              </div>
+            </div>
+            {currentStep < 5 && (
+              <div className="stepper-header__steps-title-wrapper">
+                <span className="stepper-header__steps-title">
+                  {`Passo atual: ${headerTitles[currentStep]}`}
+                </span>
+                {currentStep < 4 && (
+                  <span className="stepper-header__steps-title">
+                    {`Próximo passo: ${headerTitles[currentStep + 1]}`}
+                  </span>
+                )}
+              </div>
+            )}
+          </StepperHeader>
+        )}
         {currentStep === 0 && (
           <Step>
             <div>
